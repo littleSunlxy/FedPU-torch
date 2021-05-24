@@ -17,7 +17,7 @@ parser.add_argument('--pu_weight', type=float, default=1)#1
 parser.add_argument('--local_epochs', type=int, default=10)
 #parser.add_argument('--positiveIndex', type=str, default='k')  # 第k类为负类
 parser.add_argument('--positiveIndex', type=str, default='randomIndexList') #随机选两个标签为负类
-parser.add_argument('--positiveRate', type=float, default=1/3)#1
+parser.add_argument('--positiveRate', type=float, default=1/2)#1
 parser.add_argument('--randomIndex_num', type=int, default=6)
 
 # FL aggregator
@@ -26,7 +26,7 @@ parser.add_argument('--communication_rounds', type=int, default=400)
 parser.add_argument('--classes_per_client', type=int, default=10)
 #parser.add_argument('--participating_ratio', type=float, default=0.7)
 parser.add_argument('--clientSelect_Rate', type=float, default=0.5)
-parser.add_argument('--imagename', type=str, default='5.23.3.jpg')
+parser.add_argument('--imagename', type=str, default='5.23.4.jpg')
 
 opt, _ = parser.parse_known_args()
 
