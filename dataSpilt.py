@@ -259,27 +259,27 @@ def get_data_loaders(verbose=True):
         samplesize = [0 * 1 for i in range(opt.num_classes)]
         for l in dataset.labels:
             samplesize[l] += 1
+    #
+    #     for j in range(randomIndex_num[i]):
+    #         k = 0
+    #         while True:
+    #             index = (count + j + k) % opt.num_classes
+    #             if samplesize[index] > 400 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
+    #                 indexList.append(index)
+    #                 selectcount[index] += 1
+    #                 break
+    #             k += 1
 
-        for j in range(randomIndex_num[i]):
+        #indexlist长度一致
+        for j in range(opt.randomIndex_num):
             k = 0
             while True:
                 index = (count + j + k) % opt.num_classes
-                if samplesize[index] > 400 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
+                if (i==(opt.num_classes-1) or samplesize[index] > 400) and selectcount[index]<opt.randomIndex_num and index not in indexList:
                     indexList.append(index)
-                    selectcount[index] += 1
+                    selectcount[index]+=1
                     break
-                k += 1
-
-        #indexlist长度一致
-        # for j in range(opt.randomIndex_num):
-        #     k = 0
-        #     while True:
-        #         index = (count + j + k) % opt.num_classes
-        #         if (i==(opt.num_classes-1) or samplesize[index] > 400) and selectcount[index]<opt.randomIndex_num and index not in indexList:
-        #             indexList.append(index)
-        #             selectcount[index]+=1
-        #             break
-        #         k+=1
+                k+=1
 
         label_dict, unlabel_dict, priorList = puSpilt_index(dataset, indexList, samplesize)
         priorlist.append(priorList)
