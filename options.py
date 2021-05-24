@@ -26,7 +26,7 @@ parser.add_argument('--communication_rounds', type=int, default=2000)
 parser.add_argument('--classes_per_client', type=int, default=2)
 #parser.add_argument('--participating_ratio', type=float, default=0.7)
 parser.add_argument('--clientSelect_Rate', type=float, default=0.5)
-parser.add_argument('--imagename', type=str, default='5.23.4.jpg')
+parser.add_argument('--imagename', type=str, default='5.23.2.jpg')
 
 opt, _ = parser.parse_known_args()
 
