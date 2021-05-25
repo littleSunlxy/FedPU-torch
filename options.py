@@ -6,11 +6,11 @@ parser.add_argument('--pu_lr', type=float, default=0.1)
 parser.add_argument('--pu_weight_decay', type=float, default=5e-3)
 parser.add_argument('--pu_batchsize', type=int, default=512)
 parser.add_argument('--momentum', type=float, default=0.5)
-parser.add_argument('--dataset', type=str, default='MNIST')
+#parser.add_argument('--dataset', type=str, default='MNIST')
 parser.add_argument('--dataset', type=str, default='CIFAR10')
 parser.add_argument('--num_classes', type=int, default=10)
 parser.add_argument('--label_dir', type=str, default='/workdir/linxinyang/experiment/data/cifar10/')
-parser.add_argument('--label_dir', type=str, default='/workdir/linxinyang/experiment/data/mnist/')
+#parser.add_argument('--label_dir', type=str, default='/workdir/linxinyang/experiment/data/mnist/')
 
 # pu on clients
 parser.add_argument('--pu_weight', type=float, default=1)#1
