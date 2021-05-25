@@ -23,8 +23,8 @@ class Client:
         self.samplesize = samplesize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
-        if opt.positiveIndex == 'k':
-            self.loss = MPULoss(num_classes, opt.Pi_weight, opt.Pk_weight, opt.Ui_weight, opt.Uk_weight).cuda()
+        if opt.positiveIndex == '0':
+            self.loss = PLoss(num_classes).cuda()
         if opt.positiveIndex == 'randomIndexList':
             self.loss = MPULoss_INDEX(num_classes, opt.pu_weight).cuda()
         self.ploss = PLoss(num_classes)
