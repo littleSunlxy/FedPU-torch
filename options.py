@@ -31,8 +31,8 @@ parser.add_argument('--imagename', type=str, default='5.23.3.jpg')
 opt, _ = parser.parse_known_args()
 
 
-FedAVG_model_path = '/workdir/lxy/experiment/cache/model/local_model'
-FedAVG_aggregated_model_path = '/workdir/lxy/experiment/cache/model/FedAVG_model.pth'
+FedAVG_model_path = '/workdir/linxinyang/experiment/cache/model/local_model'
+FedAVG_aggregated_model_path = '/workdir/linxinyang/experiment/cache/model/FedAVG_model.pth'
 
 # FedAVG_model_path = '/home/lxx-006/lxy/fmpu/cache/model/local_model'
 # FedAVG_aggregated_model_path = '/home/lxx-006/lxy/fmpu/cache/model/FedAVG_model.pth'
