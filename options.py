@@ -22,7 +22,7 @@ parser.add_argument('--randomIndex_num', type=int, default=2)
 
 # FL aggregator
 parser.add_argument('--num_clients', type=int, default=10)
-parser.add_argument('--communication_rounds', type=int, default=4000)
+parser.add_argument('--communication_rounds', type=int, default=2000)
 parser.add_argument('--classes_per_client', type=int, default=2)
 #parser.add_argument('--participating_ratio', type=float, default=0.7)
 parser.add_argument('--clientSelect_Rate', type=float, default=0.5)
