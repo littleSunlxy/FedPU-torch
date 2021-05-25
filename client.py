@@ -66,7 +66,10 @@ class Client:
                 self.optimizer_pu.zero_grad()  # tidings清零
                 outputs = self.model(inputs)
 
-                loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+                if opt.positiveIndex == '0':
+                    loss = self.loss(outputs, labels)
+                if opt.positiveIndex == 'randomIndexList':
+                    loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
                 loss.backward()
                 self.optimizer_pu.step()
