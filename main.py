@@ -5,7 +5,7 @@ from model import CNNMnist, CNNCifar, ResNet34
 from FmpuTrainer import FmpuTrainer
 
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
 
 
