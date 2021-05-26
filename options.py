@@ -16,8 +16,8 @@ parser.add_argument('--label_dir', type=str, default='/workdir/linxinyang/experi
 parser.add_argument('--pu_weight', type=float, default=1)#1
 parser.add_argument('--local_epochs', type=int, default=10)
 #parser.add_argument('--positiveIndex', type=str, default='k')  # 第k类为负类
-parser.add_argument('--positiveIndex', type=str, default='0') #仅用ploss
-#parser.add_argument('--positiveIndex', type=str, default='randomIndexList') #随机选两个标签为负类
+#parser.add_argument('--positiveIndex', type=str, default='0') #仅用ploss
+parser.add_argument('--positiveIndex', type=str, default='randomIndexList') #随机选两个标签为负类
 parser.add_argument('--positiveRate', type=float, default=1/2)#1
 parser.add_argument('--randomIndex_num', type=int, default=6)
 
