@@ -53,7 +53,7 @@ class PLoss(nn.Module):
         outputs = outputs.cuda().float()
 
         # 数据划分
-        P_mask = (labels <= self.numClass - 1).nonzero().view(-1)
+        P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1)
         labelsP = torch.index_select(labels, 0, P_mask)
         outputsP = torch.index_select(outputs, 0, P_mask)
 
@@ -74,12 +74,12 @@ class MPULoss_INDEX(nn.Module):
         outputs = outputs.cuda().float()
         outputs_Soft = F.softmax(outputs, dim=1)
         # 数据划分
-        P_mask = (labels <= self.numClass - 1).nonzero().view(-1).cuda()
+        P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         labelsP = torch.index_select(labels, 0, P_mask)
         outputsP = torch.index_select(outputs, 0, P_mask)
         outputsP_Soft = torch.index_select(outputs_Soft, 0, P_mask)
 
-        U_mask = (labels > self.numClass - 1).nonzero().view(-1).cuda()
+        U_mask = (labels > self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         outputsU = torch.index_select(outputs, 0, U_mask)
         outputsU_Soft = torch.index_select(outputs_Soft, 0, U_mask)
 
