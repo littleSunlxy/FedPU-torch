@@ -265,8 +265,6 @@ def get_data_loaders(verbose=True):
             for j in range(opt.randomIndex_num):
                 k = 0
                 while True:
-                    import pdb
-                    pdb.set_trace()
                     index = (count + j + k) % opt.num_classes
                     if (i == (opt.num_classes - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
                             and index not in indexList:
@@ -292,6 +290,8 @@ def get_data_loaders(verbose=True):
         dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
         train_dataset.append(dataset)
         count += len(indexList)
+        import pdb
+        pdb.set_trace()
 
 
     print(indexlist)
