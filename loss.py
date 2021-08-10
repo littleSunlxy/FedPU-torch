@@ -78,7 +78,7 @@ class MPULoss_INDEX(nn.Module):
         labelsP = torch.index_select(labels, 0, P_mask)
         outputsP = torch.index_select(outputs, 0, P_mask)
         outputsP_Soft = torch.index_select(outputs_Soft, 0, P_mask)
-        print(outputsP_Soft.device)
+
 
         U_mask = (labels > self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         outputsU = torch.index_select(outputs, 0, U_mask)
