@@ -2,6 +2,13 @@
 <project version="4">
   <component name="PublishConfigData" autoUpload="Always" serverName="linxinyang@202.117.10.254:8022">
     <serverData>
+      <paths name="hadoop-automl@10.138.206.10:22 password (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/linxinyang/experiment" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="linxinyang@202.117.10.254:8022">
         <serverdata>
           <mappings>

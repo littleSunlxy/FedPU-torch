@@ -65,6 +65,7 @@ class Client:
                 labels = labels.cuda()
                 self.optimizer_pu.zero_grad()  # tidings清零
                 outputs = self.model(inputs)
+                print(outputs.dtype)
 
                 if opt.positiveIndex == '0':
                     loss = self.loss(outputs, labels)
