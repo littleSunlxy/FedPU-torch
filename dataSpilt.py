@@ -290,8 +290,8 @@ def get_data_loaders(verbose=True):
         dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
         train_dataset.append(dataset)
         count += len(indexList)
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
 
     print(indexlist)
