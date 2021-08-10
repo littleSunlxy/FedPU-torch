@@ -71,7 +71,7 @@ class MPULoss_INDEX(nn.Module):
         self.puW = puW
 
     def forward(self, outputs, labels, priorlist, indexlist):
-        outputs = outputs.cuda().float()
+        outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
         # 数据划分
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
