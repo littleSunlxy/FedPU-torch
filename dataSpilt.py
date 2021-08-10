@@ -249,7 +249,7 @@ def get_data_loaders(verbose=True):
 
     count = 0
     randomIndex_num = [4,4,3,3,2,2,1,1,1,1]
-    selectcount = [0 * 1 for i in range(opt.num_classes)]
+    selectcount = [0 * 1 for i in range(opt.num_clients)]
 
 
     for i, (x, y) in enumerate(split):
