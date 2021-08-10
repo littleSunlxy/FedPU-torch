@@ -11,8 +11,6 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
 def main():
     if opt.dataset == 'MNIST':
-        import pdb
-        pdb.set_trace()
         trainer = FmpuTrainer(CNNMnist().cuda())
     if opt.dataset == 'CIFAR10':
         trainer = FmpuTrainer(ResNet34().cuda())

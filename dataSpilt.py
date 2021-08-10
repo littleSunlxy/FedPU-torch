@@ -292,6 +292,9 @@ def get_data_loaders(verbose=True):
 
     print(indexlist)
 
+    import pdb
+    pdb.set_trace()
+
     client_loaders = [torch.utils.data.DataLoader(
             data, batch_size=opt.pu_batchsize, shuffle=True) for data in train_dataset]
 
