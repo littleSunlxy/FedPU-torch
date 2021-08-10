@@ -290,10 +290,10 @@ def get_data_loaders(verbose=True):
         train_dataset.append(dataset)
         count += len(indexList)
 
-    print(indexlist)
-
     import pdb
     pdb.set_trace()
+
+    print(indexlist)
 
     client_loaders = [torch.utils.data.DataLoader(
             data, batch_size=opt.pu_batchsize, shuffle=True) for data in train_dataset]
