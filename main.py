@@ -25,4 +25,6 @@ def main():
 
 
 if __name__ == '__main__':
+    # merge config
+
     main()
