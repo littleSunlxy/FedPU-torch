@@ -23,6 +23,7 @@ class FmpuTrainer:
                             for sample_size, _id , priorList, indexList, in zip(local_sample_sizes, list(range(opt.num_clients)), priorlist, indexlist)]
 
         self.clientSelect_idxs = []
+        print(len(self.clients))
         self.cloud = Cloud(self.clients, model_pu, opt.num_classes, test_dataloader)
         self.communication_rounds = opt.communication_rounds
         self.current_round = 0
@@ -64,7 +65,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
 
             self.cloud.model.load_state_dict(w_glob)
-            if t%10==0:
+            if t%10 == 0:
                 FLAcc.append(self.cloud.validation())
 
         plotAcc(FmpuAcc, FLAcc)
