@@ -251,6 +251,9 @@ def get_data_loaders(verbose=True):
     randomIndex_num = [4,4,3,3,2,2,1,1,1,1]
     selectcount = [0 * 1 for i in range(opt.num_classes)]
 
+    import pdb
+    pdb.set_trace()
+
     for i, (x, y) in enumerate(split):
         indexList = []
         dataset = CustomImageDataset(x, y, transforms_train)
@@ -290,8 +293,6 @@ def get_data_loaders(verbose=True):
         train_dataset.append(dataset)
         count += len(indexList)
 
-    import pdb
-    pdb.set_trace()
 
     print(indexlist)
 
