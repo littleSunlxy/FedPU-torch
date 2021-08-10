@@ -88,7 +88,7 @@ class MPULoss_INDEX(nn.Module):
 
         for i in range(self.numClass):
             if i in indexlist:      # calculate ui
-                pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + 0.01))  / max(1, outputsU.size(0)) / len(indexlist)
+                pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + 0.01)) / max(1, outputsU.size(0)) / len(indexlist)
                 PULoss += pu3
             else:
                 pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + 0.01)) * priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))

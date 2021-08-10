@@ -154,7 +154,7 @@ def puSpilt_index(dataset, indexlist, samplesize):
     bias = 0
     for i in range(opt.num_classes):
         if samplesize[i] != 0:
-            if i in indexlist and samplesize[i]>=500:
+            if i in indexlist and samplesize[i]>=40:
                 labeled = np.concatenate(
                     (labeled, idxs[bias : int(bias + opt.positiveRate * samplesize[i])]), axis=0)
                 bias += int(opt.positiveRate * samplesize[i])
