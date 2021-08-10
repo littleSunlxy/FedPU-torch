@@ -251,8 +251,6 @@ def get_data_loaders(verbose=True):
     randomIndex_num = [4,4,3,3,2,2,1,1,1,1]
     selectcount = [0 * 1 for i in range(opt.num_classes)]
 
-    # import pdb
-    # pdb.set_trace()
 
     for i, (x, y) in enumerate(split):
         indexList = []
@@ -267,6 +265,8 @@ def get_data_loaders(verbose=True):
             for j in range(opt.randomIndex_num):
                 k = 0
                 while True:
+                    import pdb
+                    pdb.set_trace()
                     index = (count + j + k) % opt.num_classes
                     if (i == (opt.num_classes - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
                             and index not in indexList:
