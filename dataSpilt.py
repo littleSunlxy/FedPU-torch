@@ -268,8 +268,8 @@ def get_data_loaders(verbose=True):
                 k = 0
                 while True:
                     index = (count + j + k) % opt.num_classes
-                    if (i == (opt.num_classes - 1) or samplesize[index] > 400) and selectcount[
-                        index] < opt.randomIndex_num and index not in indexList:
+                    if (i == (opt.num_classes - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
+                            and index not in indexList:
                         indexList.append(index)
                         selectcount[index] += 1
                         break
@@ -279,7 +279,7 @@ def get_data_loaders(verbose=True):
                 k = 0
                 while True:
                     index = (count + j + k) % opt.num_classes
-                    if samplesize[index] > 400 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
+                    if samplesize[index] > 40 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
                         indexList.append(index)
                         selectcount[index] += 1
                         break
