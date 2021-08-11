@@ -66,6 +66,7 @@ class FmpuTrainer:
 
             self.cloud.model.load_state_dict(w_glob)
             del w_glob
+            print("  after")
         #     if t%10 == 0:
         #         FLAcc.append(self.cloud.validation())
         #
