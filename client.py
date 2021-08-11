@@ -69,7 +69,7 @@ class Client:
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
                 print("2:{}".format(torch.cuda.memory_allocated(0)))
-                exit()
+
                 loss.backward()
                 # if i == 0:
                 #     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
