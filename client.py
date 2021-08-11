@@ -55,6 +55,9 @@ class Client:
         for epoch in range(opt.local_epochs):
 
             for i, (inputs, labels) in enumerate(self.train_loader):
+                import pdb
+                pdb.set_trace()
+
                 print("1:{}".format(torch.cuda.memory_allocated(0)))
                 inputs = inputs.cuda()
                 labels = labels.cuda()
