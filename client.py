@@ -50,12 +50,6 @@ class Client:
 
     def train_pu(self):
 
-        trainAcc = []
-        trainPosAcc = []
-        testAcc = []
-        Ploss = []
-        Uloss = []
-
         self.model.train()
 
         for epoch in range(opt.local_epochs):
@@ -71,15 +65,17 @@ class Client:
                     loss = self.loss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
-                    print("loss:", loss, "ploss", ploss, "uloss", uloss)
 
                 loss.backward()
+                if i == 0:
+                    print("loss:", loss, "ploss", ploss, "uloss", uloss)
                 self.optimizer_pu.step()
+
+
 
         self.communicationRound+=1
         self.scheduler.step()
 
-        return trainAcc, trainPosAcc, testAcc, Ploss, Uloss
 
 
     def train_P(self):
