@@ -31,7 +31,8 @@ class FmpuTrainer:
     def begin_train(self):
         print("Fmpu is going to train")
         FmpuAcc = []
-
+        import pdb
+        pdb.set_trace()
         for t in range (self.communication_rounds):
             print("\n current round " + str(t)+"\n")
             self.current_round = t + 1
