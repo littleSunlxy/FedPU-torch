@@ -31,8 +31,8 @@ class FmpuTrainer:
     def begin_train(self):
         print("Fmpu is going to train")
         FmpuAcc = []
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         for t in range (self.communication_rounds):
             print("\n current round " + str(t)+"\n")
             self.current_round = t + 1
@@ -65,13 +65,13 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
 
             self.cloud.model.load_state_dict(w_glob)
-            if t%10 == 0:
-                FLAcc.append(self.cloud.validation())
-
-        plotAcc(FmpuAcc, FLAcc)
+        #     if t%10 == 0:
+        #         FLAcc.append(self.cloud.validation())
+        #
+        # plotAcc(FmpuAcc, FLAcc)
 
     def clients_select(self):
-        m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
+        m = min(int(opt.clientSelect_Rate * opt.num_clients), 1)
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
 
     def clients_train_step(self):

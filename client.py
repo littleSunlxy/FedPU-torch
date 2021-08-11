@@ -71,6 +71,7 @@ class Client:
                     loss = self.loss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+                    print("loss:", loss, "ploss", ploss, "uloss", uloss)
 
                 loss.backward()
                 self.optimizer_pu.step()
