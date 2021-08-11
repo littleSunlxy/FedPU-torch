@@ -40,16 +40,16 @@ class FmpuTrainer:
             self.clients_select()
             # client train step
             self.clients_train_step()
-
+            print("2:{}".format(torch.cuda.memory_allocated(0)))
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
-            print("2:{}".format(torch.cuda.memory_allocated(0)))
+            print("3:{}".format(torch.cuda.memory_allocated(0)))
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.validation()
-            print("3:{}".format(torch.cuda.memory_allocated(0)))
+
 
         # 所有clients重新初始化
         for client in self.clients:
