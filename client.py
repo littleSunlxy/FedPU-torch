@@ -66,6 +66,7 @@ class Client:
                 if opt.positiveIndex == 'randomIndexList':
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
+
                 loss.backward()
                 if i == 0:
                     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
