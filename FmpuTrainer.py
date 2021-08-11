@@ -8,6 +8,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 import copy
 from loss import MPULoss
 import matplotlib.pyplot as plt
+import torch
 
 
 class FmpuTrainer:
@@ -34,6 +35,7 @@ class FmpuTrainer:
         # pdb.set_trace()
         for t in range (self.communication_rounds):
             print("\n current round " + str(t)+"\n")
+            print("1:{}".format(torch.cuda.memory_allocated(7)))
             self.current_round = t + 1
             self.clients_select()
             # client train step
@@ -41,11 +43,13 @@ class FmpuTrainer:
 
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
+            print("1:{}".format(torch.cuda.memory_allocated(7)))
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.validation()
+            print("1:{}".format(torch.cuda.memory_allocated(7)))
 
         # 所有clients重新初始化
         for client in self.clients:
