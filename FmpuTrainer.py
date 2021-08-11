@@ -71,7 +71,7 @@ class FmpuTrainer:
         # plotAcc(FmpuAcc, FLAcc)
 
     def clients_select(self):
-        m = min(int(opt.clientSelect_Rate * opt.num_clients), 1)
+        m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
 
     def clients_train_step(self):
