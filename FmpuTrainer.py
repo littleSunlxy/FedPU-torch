@@ -35,7 +35,7 @@ class FmpuTrainer:
         # pdb.set_trace()
         for t in range (self.communication_rounds):
             print("\n current round " + str(t)+"\n")
-            print("1:{}".format(torch.cuda.memory_allocated(7)))
+            print("1:{}".format(torch.cuda.memory_allocated(0)))
             self.current_round = t + 1
             self.clients_select()
             # client train step
@@ -43,13 +43,13 @@ class FmpuTrainer:
 
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
-            print("1:{}".format(torch.cuda.memory_allocated(7)))
+            print("2:{}".format(torch.cuda.memory_allocated(0)))
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.validation()
-            print("1:{}".format(torch.cuda.memory_allocated(7)))
+            print("3:{}".format(torch.cuda.memory_allocated(0)))
 
         # 所有clients重新初始化
         for client in self.clients:
