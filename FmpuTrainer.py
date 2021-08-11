@@ -40,8 +40,6 @@ class FmpuTrainer:
             self.clients_select()
             # client train step
             self.clients_train_step()   # memery up
-            print("3:{}".format(torch.cuda.memory_allocated(0)))
-            exit()
 
 
             self.clients_validation_step()
