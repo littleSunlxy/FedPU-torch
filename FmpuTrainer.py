@@ -63,9 +63,9 @@ class FmpuTrainer:
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
-                del w_glob
 
             self.cloud.model.load_state_dict(w_glob)
+            del w_glob
         #     if t%10 == 0:
         #         FLAcc.append(self.cloud.validation())
         #
