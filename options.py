@@ -4,7 +4,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--pu_lr', type=float, default=0.1)
 parser.add_argument('--pu_weight_decay', type=float, default=5e-3)
-parser.add_argument('--pu_batchsize', type=int, default=512)
+parser.add_argument('--pu_batchsize', type=int, default=128)
 parser.add_argument('--momentum', type=float, default=0.9)
 parser.add_argument('--dataset', type=str, default='MNIST')
 #parser.add_argument('--dataset', type=str, default='CIFAR10')
