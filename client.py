@@ -68,8 +68,8 @@ class Client:
 
 
                 loss.backward()
-                if i == 0:
-                    print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
+                # if i == 0:
+                #     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
                 self.optimizer_pu.step()
 
 
