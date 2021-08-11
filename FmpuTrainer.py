@@ -45,6 +45,9 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
+            self.cloud.model.load_state_dict(w_glob)
+            import sys
+            sys.getrefcount(w_glob)
             del w_glob
             print("  after")
 
