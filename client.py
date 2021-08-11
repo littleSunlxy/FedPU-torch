@@ -60,17 +60,19 @@ class Client:
                 self.optimizer_pu.zero_grad()  # tidings清零
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
+                print("1:{}".format(torch.cuda.memory_allocated(0)))
 
                 if opt.positiveIndex == '0':
                     loss = self.loss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
-
+                print("2:{}".format(torch.cuda.memory_allocated(0)))
                 loss.backward()
                 # if i == 0:
                 #     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
                 self.optimizer_pu.step()
+                print("3:{}".format(torch.cuda.memory_allocated(0)))
 
 
 
