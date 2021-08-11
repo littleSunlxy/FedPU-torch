@@ -39,11 +39,15 @@ class FmpuTrainer:
             self.current_round = t + 1
             self.clients_select()
             # client train step
-            self.clients_train_step()
             print("2:{}".format(torch.cuda.memory_allocated(0)))
+            self.clients_train_step()
+            print("3:{}".format(torch.cuda.memory_allocated(0)))
+
+
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
-            print("3:{}".format(torch.cuda.memory_allocated(0)))
+
+
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
             #
