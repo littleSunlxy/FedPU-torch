@@ -30,8 +30,7 @@ class FmpuTrainer:
 
     def begin_train(self):
         print("Fmpu is going to train")
-        # import pdb
-        # pdb.set_trace()
+
         for t in range (self.communication_rounds):
             print("\n current round " + str(t)+"\n")
             self.current_round = t + 1
@@ -46,6 +45,9 @@ class FmpuTrainer:
             #
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.model.load_state_dict(w_glob)
+            import pdb
+            pdb.set_trace()
+
             import sys
             print(sys.getrefcount(w_glob))
             del w_glob
