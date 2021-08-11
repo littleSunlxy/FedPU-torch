@@ -30,7 +30,6 @@ class FmpuTrainer:
 
     def begin_train(self):
         print("Fmpu is going to train")
-        FmpuAcc = []
         # import pdb
         # pdb.set_trace()
         for t in range (self.communication_rounds):
@@ -46,7 +45,8 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
-            FmpuAcc.append(self.cloud.validation())
+            del w_glob
+            print("  after")
 
         # 所有clients重新初始化
         for client in self.clients:
@@ -65,8 +65,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
 
             self.cloud.model.load_state_dict(w_glob)
-            del w_glob
-            print("  after")
+
         #     if t%10 == 0:
         #         FLAcc.append(self.cloud.validation())
         #
