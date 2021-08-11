@@ -81,8 +81,8 @@ class MPULoss_INDEX(nn.Module):
 
 
         U_mask = (labels > self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
-        outputsU = torch.index_select(outputs, 0, U_mask)
-        outputsU_Soft = torch.index_select(outputs_Soft, 0, U_mask)
+        outputsU = torch.index_select(outputs, 0, U_mask)               #  unlabeldata 的 ground truth. setting限制不能使用
+        outputsU_Soft = torch.index_select(outputs_Soft, 0, U_mask)     #  所有在 unlabeldata 上的预测值
 
         PULoss = torch.zeros(1).cuda()
 
