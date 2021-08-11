@@ -55,12 +55,13 @@ class Client:
         for epoch in range(opt.local_epochs):
 
             for i, (inputs, labels) in enumerate(self.train_loader):
+                print("1:{}".format(torch.cuda.memory_allocated(0)))
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_pu.zero_grad()  # tidings清零
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
-                print("1:{}".format(torch.cuda.memory_allocated(0)))
+
 
                 if opt.positiveIndex == '0':
                     loss = self.loss(outputs, labels)
