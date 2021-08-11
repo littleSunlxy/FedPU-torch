@@ -127,8 +127,6 @@ class ResNet(nn.Module):
         self.flatten = FlattenLayer()
         self.linear = nn.Linear(512*block.expansion, num_classes)
 
-    def __del__(self):
-        print("\ndel")
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)

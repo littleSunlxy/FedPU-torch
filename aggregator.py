@@ -17,6 +17,7 @@ class Cloud:
         self.numclasses = numclasses
         self.test_loader = dataloader
         self.participating_clients = None
+        self.aggregated_client_model = {}
 
     def aggregate(self, clientSelect_idxs):
         w_locals = []
@@ -41,18 +42,17 @@ class Cloud:
         #         w_avg[k] += w_locals[i][k] * weight[i]
         #     #w_avg[k] = torch.div(w_avg[k], len(w_locals))
 
-        aggregated_client_model = {}
         for k, idx in enumerate(clientSelect_idxs):
             client = self.clients[idx]
             weight = client.samplesize / totalsize
             # print(client.client_id, client.sample_size, self.total_client_data_size, weight)
             for name, param in client.model.state_dict().items():
                 if k == 0:
-                    aggregated_client_model[name] = param.data * weight
+                    self.aggregated_client_model[name] = param.data * weight
                 else:
-                    aggregated_client_model[name] += param.data * weight
+                    self.aggregated_client_model[name] += param.data * weight
 
-        return aggregated_client_model
+        return self.aggregated_client_model
 
     def validation(self):
         self.model.eval()

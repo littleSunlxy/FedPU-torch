@@ -45,13 +45,6 @@ class FmpuTrainer:
             #
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.model.load_state_dict(w_glob)
-            import pdb
-            pdb.set_trace()
-
-            import sys
-            print(sys.getrefcount(w_glob))
-            del w_glob
-            print("  after")
 
         # 所有clients重新初始化
         for client in self.clients:
