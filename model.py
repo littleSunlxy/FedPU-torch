@@ -154,3 +154,44 @@ def ResNet18():
 
 def ResNet34():
     return ResNet(BasicBlock, [3, 4, 6, 3])
+
+
+def conv_block(in_ch, out_ch, pool=False):
+    '''Represents single convolution block'''
+    layers = [nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=1, padding=1),
+              nn.BatchNorm2d(out_ch),
+              nn.ReLU()]
+    if pool:
+        layers.append(nn.MaxPool2d(2, 2))
+    return nn.Sequential(*layers)
+
+
+class ResNet9(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # in 32*32*3
+        self.conv1 = conv_block(3, 64)  # 32*32*64
+        self.conv2 = conv_block(64, 128, True)  # 16*16*128
+
+        self.res1 = nn.Sequential(conv_block(128, 128),
+                                  conv_block(128, 128))
+        self.conv3 = conv_block(128, 256, True)  # 8*8*256
+        self.conv4 = conv_block(256, 512, True)  # 4*4*512
+        self.res2 = nn.Sequential(conv_block(512, 512),
+                                  conv_block(512, 512))
+
+        self.classifier = nn.Sequential(nn.MaxPool2d(4),  # 1*1*512
+                                        nn.Flatten(),  # 512
+                                        nn.Dropout(0.2),  # removing 20% of activations
+                                        nn.Linear(512, 10)
+                                        )
+
+    def forward(self, x):
+        out = self.conv1(x)
+        out = self.conv2(out)
+        out = self.res1(out) + out
+        out = self.conv3(out)
+        out = self.conv4(out)
+        out = self.res2(out) + out
+        out = self.classifier(out)
+        return out
