@@ -66,7 +66,9 @@ class Client:
                     loss = self.loss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
-
+                import pdb
+                pdb.set_trace()
+                print(self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
                 # if i == 0:
                 #     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)

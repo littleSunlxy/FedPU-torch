@@ -34,7 +34,7 @@ class FmpuTrainer:
         # import pdb
         # pdb.set_trace()
         for t in range (self.communication_rounds):
-            print("\n current round " + str(t)+"\n")
+            print("\nround " + str(t)+" ")
 
             self.current_round = t + 1
             self.clients_select()
@@ -60,7 +60,7 @@ class FmpuTrainer:
         print("FL on Positive is going to train")
         FLAcc = []
         for t in range(self.communication_rounds):
-            print("\n current round " + str(t) + "\n")
+            print("\nround " + str(t)+" ")
             self.current_round = t + 1
             self.clients_select()
             self.clients_train_step_P()
