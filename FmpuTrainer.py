@@ -70,9 +70,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
 
             self.cloud.model.load_state_dict(w_glob)
-
-        #     if t%10 == 0:
-        #         FLAcc.append(self.cloud.validation())
+            self.cloud.validation()
         #
         # plotAcc(FmpuAcc, FLAcc)
 
