@@ -18,7 +18,6 @@ class FmpuTrainer:
         local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
 
         # create Clients and Aggregating Server
-        import pdb; pdb.set_trace()
         self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,  sample_size, opt.local_epochs,
                                opt.num_classes, priorList, indexList)
                             for sample_size, _id , priorList, indexList, in zip(local_sample_sizes, list(range(opt.num_clients)), priorlist, indexlist)]
