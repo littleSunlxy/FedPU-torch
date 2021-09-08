@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b5252bc1-6a37-4f2e-8301-94bff71249fd" name="50.mt">
+        <fileTransfer rootFolder="/workdir/linxinyang/" accessType="SFTP" host="zw03-data-hdp-dn-a100-gpu0050.mt" port="8000" sshConfigId="82b26010-4559-4c2a-a731-68da46cd7123" sshConfig="hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
