@@ -187,6 +187,8 @@ class ResNet9(nn.Module):
                                         )
 
     def forward(self, x):
+        import pdb;
+        pdb.set_trace()
         out = self.conv1(x)
         out = self.conv2(out)
         out = self.res1(out) + out
