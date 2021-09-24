@@ -54,8 +54,8 @@ class FmpuTrainer:
         #
         #
         # # 所有clients重新初始化
-        # for client in self.clients:
-        #     client.load_original_model()
+        for client in self.clients:
+            client.load_original_model()
 
         print("FL on Positive is going to train")
         FLAcc = []

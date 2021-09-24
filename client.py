@@ -88,7 +88,7 @@ class Client:
 
                 inputs = inputs.cuda()
                 labels = labels.cuda()
-                # self.optimizer_p.zero_grad()  # tidings清零
+                self.optimizer_p.zero_grad()  # tidings清零
                 outputs = self.model(inputs)
                 loss = self.ploss(outputs, labels)
                 loss.backward()
