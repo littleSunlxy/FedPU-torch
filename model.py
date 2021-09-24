@@ -187,13 +187,21 @@ class ResNet9(nn.Module):
                                         )
 
     def forward(self, x):
+        print("in size:", x.size())
+        out = self.conv1(x)
+        print("after conv1 size:", out.size())
+        out = self.conv2(out)
+        print("after conv2 size:", out.size())
+        out = self.res1(out) + out
+        print("after res1 size:", out.size())
+        out = self.conv3(out)
+        print("after conv3 size:", out.size())
+        out = self.conv4(out)
+        print("after conv3 size:", out.size())
+        out = self.res2(out) + out
+        print("after res2 size:", out.size())
+        out = self.classifier(out)
+        print("after classifer size:", out.size())
         import pdb;
         pdb.set_trace()
-        out = self.conv1(x)
-        out = self.conv2(out)
-        out = self.res1(out) + out
-        out = self.conv3(out)
-        out = self.conv4(out)
-        out = self.res2(out) + out
-        out = self.classifier(out)
         return out
