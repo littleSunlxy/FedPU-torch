@@ -26,7 +26,7 @@ class FmpuTrainer:
             self.loader = DataLoader(opt)
             self.load_data()
             self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda())
-                            for _id in zip(list(range(opt.num_clients)))]
+                            for _id in list(range(opt.num_clients))]
 
         self.clientSelect_idxs = []
         # print(len(self.clients))
