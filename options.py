@@ -37,6 +37,7 @@ parser.add_argument('--imagename', type=str, default='5.23.6.jpg')
 parser.add_argument('--useFedmatchDataLoader', action='store_true', default=False,
                     help='use FedmatchDataLoader')
 parser.add_argument('--bsize_s', type=int, default=5)
+parser.add_argument('--test_batchsize', type=int, default=500)
 
 
 opt, _ = parser.parse_known_args()

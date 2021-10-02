@@ -1,9 +1,11 @@
 import numpy as np
-from options import opt
 import torch
 import random
 from torch.utils.data.dataset import Dataset
 from torchvision import datasets, transforms
+
+from options import opt
+
 
 class DatasetSplit(Dataset):
     def __init__(self, dataset, idxs):
@@ -291,8 +293,6 @@ def get_data_loaders(verbose=True):
         dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
         train_dataset.append(dataset)
         count += len(indexList)
-
-
 
     print(indexlist)
 

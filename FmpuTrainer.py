@@ -1,15 +1,17 @@
+import numpy as np
+import torch.optim as optim
+from multiprocessing.dummy import Pool as ThreadPool
+import copy
+import matplotlib.pyplot as plt
+import torch
+
+from loss import MPULoss
+from dataSpilt import CustomImageDataset
+from datasets.loader import DataLoader
 from options import opt
 from modules.client import Client
 from modules.aggregator import Cloud
 from dataSpilt import get_data_loaders
-import numpy as np
-import torch.optim as optim
-from multiprocessing.dummy import Pool as ThreadPool
-from datasets.loader import DataLoader
-import copy
-from loss import MPULoss
-import matplotlib.pyplot as plt
-import torch
 
 
 class FmpuTrainer:
@@ -27,6 +29,9 @@ class FmpuTrainer:
             # test_dataset = self.loader(get_test)
             # TODO: change to dataloader format
             self.load_data()
+            self.loader.get_test()
+            test_dataset = CustomImageDataset((self.x_test, self.y_test, transforms_eval))
+            test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.test_batchsize, shuffle=True)
             self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda())
                             for _id in list(range(opt.num_clients))]
 

@@ -1,6 +1,3 @@
-"""
-client in Fmpu
-"""
 import time
 import torch
 from torch import nn
@@ -8,6 +5,7 @@ from copy import deepcopy
 import torch.optim as optim
 from pylab import *
 import matplotlib.pyplot as plt
+
 from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
 from loss import MPULoss, PLoss, MPULoss_INDEX
@@ -45,6 +43,7 @@ class Client:
             self.load_data()
             self.train_loader, self.test_loader = self.getFedmatchLoader()
 
+
     def getFedmatchLoader(self):
 
         self.x_test, self.y_test =  self.loader.get_test()
@@ -56,19 +55,19 @@ class Client:
         num_steps = round(len(self.x_labeled)/bsize_s)
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
         # sign the unlabeled data
-        import pdb; pdb.set_trace()
-        print(self.x_unlabeled)
+        self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy
+        self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy
+
         # merge the S and U datasets
-        self.x_labeled, self.y_labeled
-        self.x_unlabeled, self.y_unlabeled
+        train_x = np.concatenate((self.x_labeled,self.x_unlabeled),axis = 0)
+        train_y = np.concatenate((self.y_labeled,self.y_unlabeled),axis = 0)
 
-        train_dataset = CustomImageDataset((x_test, y_test, transforms_eval))
-        test_dataset = CustomImageDataset((x_test, y_test, transforms_eval))
-        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opt.pu_batchsize, shuffle=True)
-        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.pu_batchsize, shuffle=True)
+        batchsize = bsize_s + bsize_u
+        train_dataset = CustomImageDataset((train_x, train_y, transforms_train))
+        test_dataset = CustomImageDataset((self.x_test, self.y_test, transforms_eval))
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batchsize, shuffle=True)
         return train_loader, test_loader
-
-
 
 
 
