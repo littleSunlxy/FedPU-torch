@@ -59,7 +59,6 @@ class Client:
         self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
 
         # merge the S and U datasets
-        import pdb; pdb.set_trace()
         train_x = np.concatenate((self.x_labeled, self.x_unlabeled),axis = 0)
         train_y = np.concatenate((self.y_labeled, self.y_unlabeled),axis = 0)
 
