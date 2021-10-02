@@ -7,7 +7,7 @@ from PIL import Image
 from scipy.ndimage.interpolation import rotate, shift
 from third_party.rand_augment.randaug import RandAugment
 
-from misc.utils import *
+from utils import *
 from config import *
 
 class DataLoader:
