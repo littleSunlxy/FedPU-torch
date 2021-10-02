@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
 from loss import MPULoss, PLoss, MPULoss_INDEX
+from datasets.loader import DataLoader
 
 
 class Client:
