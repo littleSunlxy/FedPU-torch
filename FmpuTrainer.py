@@ -11,7 +11,7 @@ from datasets.loader import DataLoader
 from options import opt
 from modules.client import Client
 from modules.aggregator import Cloud
-from dataSpilt import get_data_loaders
+from dataSpilt import get_data_loaders, get_default_data_transforms
 
 
 class FmpuTrainer:
