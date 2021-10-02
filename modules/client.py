@@ -14,7 +14,7 @@ from loss import MPULoss, PLoss, MPULoss_INDEX
 
 
 class Client:
-    def __init__(self, client_id, model_pu, trainloader, testloader, priorlist=None, indexlist=None):
+    def __init__(self, client_id, model_pu, trainloader=None, testloader=None, priorlist=None, indexlist=None):
         self.client_id = client_id
         self.current_round = 0
         self.batches = len(self.train_loader)
