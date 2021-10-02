@@ -55,8 +55,8 @@ class Client:
         num_steps = round(len(self.x_labeled)/bsize_s)
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
         # sign the unlabeled data
-        self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy
-        self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy
+        self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
+        self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
 
         # merge the S and U datasets
         import pdb; pdb.set_trace()
