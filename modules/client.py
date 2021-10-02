@@ -10,7 +10,7 @@ from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
 from loss import MPULoss, PLoss, MPULoss_INDEX
 from datasets.loader import DataLoader
-from dataSpilt import CustomImageDataset
+from dataSpilt import CustomImageDataset, get_default_data_transforms
 
 
 class Client:
@@ -63,6 +63,7 @@ class Client:
         train_y = np.concatenate((self.y_labeled,self.y_unlabeled),axis = 0)
 
         batchsize = bsize_s + bsize_u
+        transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
         train_dataset = CustomImageDataset((train_x, train_y, transforms_train))
         test_dataset = CustomImageDataset((self.x_test, self.y_test, transforms_eval))
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
