@@ -61,11 +61,11 @@ def get_CIFAR10():
     data_train = datasets.CIFAR10(root=opt.label_dir, train=True, download=True)
     data_test = datasets.CIFAR10(root=opt.label_dir, train=False, download=True)
     #
-    x_train, y_train = data_train.train_data.transpose((0, 3, 1, 2)), np.array(data_train.train_labels)
-    x_test, y_test = data_test.test_data.transpose((0, 3, 1, 2)), np.array(data_test.test_labels)
+    # x_train, y_train = data_train.train_data.transpose((0, 3, 1, 2)), np.array(data_train.train_labels)
+    # x_test, y_test = data_test.test_data.transpose((0, 3, 1, 2)), np.array(data_test.test_labels)
 
-    # x_train, y_train = data_train.data.transpose((0, 3, 1, 2)), np.array(data_train.targets)
-    # x_test, y_test = data_test.data.transpose((0, 3, 1, 2)), np.array(data_test.targets)
+    x_train, y_train = data_train.data.transpose((0, 3, 1, 2)), np.array(data_train.targets)
+    x_test, y_test = data_test.data.transpose((0, 3, 1, 2)), np.array(data_test.targets)
 
 
     return x_train, y_train, x_test, y_test
@@ -250,7 +250,8 @@ def get_data_loaders(verbose=True):
     count = 0
     randomIndex_num = [4,4,3,3,2,2,1,1,1,1]
 
-
+    # import pdb;
+    # pdb.set_trace()
     for i, (x, y) in enumerate(split):
         indexList = []
         dataset = CustomImageDataset(x, y, transforms_train)

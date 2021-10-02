@@ -48,27 +48,27 @@ class FmpuTrainer:
         print("Fmpu is going to train")
         # import pdb
         # pdb.set_trace()
-        for t in range (self.communication_rounds):
-            print("\nround " + str(t)+" ")
-
-            self.current_round = t + 1
-            self.clients_select()
-            # client train step
-            self.clients_train_step()   # memery up
-
-
-            self.clients_validation_step()
-            w_glob = self.cloud.aggregate(self.clientSelect_idxs)
-
-
-            for client in self.clients:
-                client.model.load_state_dict(w_glob)
-            #
-            self.cloud.model.load_state_dict(w_glob)
-            self.cloud.validation()
-
-
-        # 所有clients重新初始化
+        # for t in range (self.communication_rounds):
+        #     print("\nround " + str(t)+" ")
+        #
+        #     self.current_round = t + 1
+        #     self.clients_select()
+        #     # client train step
+        #     self.clients_train_step()   # memery up
+        #
+        #
+        #     self.clients_validation_step()
+        #     w_glob = self.cloud.aggregate(self.clientSelect_idxs)
+        #
+        #
+        #     for client in self.clients:
+        #         client.model.load_state_dict(w_glob)
+        #     #
+        #     self.cloud.model.load_state_dict(w_glob)
+        #     self.cloud.validation()
+        #
+        #
+        # # 所有clients重新初始化
         for client in self.clients:
             client.load_original_model()
 
@@ -85,9 +85,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
 
             self.cloud.model.load_state_dict(w_glob)
-
-        #     if t%10 == 0:
-        #         FLAcc.append(self.cloud.validation())
+            self.cloud.validation()
         #
         # plotAcc(FmpuAcc, FLAcc)
 

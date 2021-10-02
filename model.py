@@ -173,16 +173,16 @@ class ResNet9(nn.Module):
         self.conv1 = conv_block(3, 64)  # 32*32*64
         self.conv2 = conv_block(64, 128, True)  # 16*16*128
 
-        self.res1 = nn.Sequential(conv_block(128, 128),
+        self.res1 = nn.Sequential(conv_block(128, 128), # 16*16*128
                                   conv_block(128, 128))
         self.conv3 = conv_block(128, 256, True)  # 8*8*256
         self.conv4 = conv_block(256, 512, True)  # 4*4*512
-        self.res2 = nn.Sequential(conv_block(512, 512),
+        self.res2 = nn.Sequential(conv_block(512, 512), # 4*4*512
                                   conv_block(512, 512))
 
         self.classifier = nn.Sequential(nn.MaxPool2d(4),  # 1*1*512
                                         nn.Flatten(),  # 512
-                                        nn.Dropout(0.2),  # removing 20% of activations
+                                        # nn.Dropout(0.2),  # removing 20% of activations
                                         nn.Linear(512, 10)
                                         )
 

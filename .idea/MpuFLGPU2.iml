@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (rcnn)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.6.13 (sftp://hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000/home/hadoop-automl/.conda/envs/torch17_mmseg13/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

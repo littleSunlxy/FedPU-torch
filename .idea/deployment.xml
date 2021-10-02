@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="linxinyang@202.117.10.254:8022">
+  <component name="PublishConfigData" autoUpload="Always" serverName="hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000 password">
     <serverData>
-      <paths name="hadoop-automl@10.138.206.10:22 password (1)">
+      <paths name="50.mt">
         <serverdata>
           <mappings>
-            <mapping deploy="/linxinyang/experiment" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="experiment" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_318" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
