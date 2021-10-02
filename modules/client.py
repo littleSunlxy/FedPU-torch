@@ -12,6 +12,7 @@ from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
 from loss import MPULoss, PLoss, MPULoss_INDEX
 from datasets.loader import DataLoader
+from dataSpilt import CustomImageDataset
 
 
 class Client:
@@ -42,6 +43,34 @@ class Client:
             self.state = {'client_id': client_id}
             self.loader = DataLoader(opt)
             self.load_data()
+            self.train_loader, self.test_loader = self.getFedmatchLoader()
+
+    def getFedmatchLoader(self):
+
+        self.x_test, self.y_test =  self.loader.get_test()
+        self.x_valid, self.y_valid =  self.loader.get_valid()
+        self.x_test = self.loader.scale(self.x_test)
+        self.x_valid = self.loader.scale(self.x_valid)
+
+        bsize_s = opt.bsize_s
+        num_steps = round(len(self.x_labeled)/bsize_s)
+        bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
+        # sign the unlabeled data
+        import pdb; pdb.set_trace()
+        print(self.x_unlabeled)
+        # merge the S and U datasets
+        self.x_labeled, self.y_labeled
+        self.x_unlabeled, self.y_unlabeled
+
+        train_dataset = CustomImageDataset((x_test, y_test, transforms_eval))
+        test_dataset = CustomImageDataset((x_test, y_test, transforms_eval))
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=opt.pu_batchsize, shuffle=True)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.pu_batchsize, shuffle=True)
+        return train_loader, test_loader
+
+
+
+
 
     def load_original_model(self):
         self.model = deepcopy(self.original_model)
@@ -55,9 +84,8 @@ class Client:
             self.model.load_state_dict(torch.load(FedAVG_aggregated_model_path))
 
 
-    #----------------use FedMatch dataloader------------
-
     def load_data(self):
+        '''use FedMatch dataloader'''
         self.x_labeled, self.y_labeled, task_name = \
                 self.loader.get_s_by_id(self.state['client_id'])
         self.x_unlabeled, self.y_unlabeled, task_name = \
@@ -66,9 +94,6 @@ class Client:
         self.x_valid, self.y_valid =  self.loader.get_valid()
         self.x_test = self.loader.scale(self.x_test)
         self.x_valid = self.loader.scale(self.x_valid)
-
-    #----------------use FedMatch dataloader------------
-
 
 
     def train_pu(self):
@@ -93,20 +118,6 @@ class Client:
 
         self.communicationRound+=1
         self.scheduler.step()
-
-
-    def train_P_fedmatch(self):
-        bsize_s = opt.bsize_s
-        num_steps = round(len(self.x_labeled)/bsize_s)
-        bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
-
-        x_labeled = self.x_labeled[i*bsize_s:(i+1)*bsize_s]
-        y_labeled = self.y_labeled[i*bsize_s:(i+1)*bsize_s]
-        x_unlabeled = self.x_unlabeled[i*bsize_u:(i+1)*bsize_u]
-        y_unlabeled = self.x_unlabeled[i*bsize_u:(i+1)*bsize_u]
-
-        # merge to new trainloader
-
 
 
     def train_P(self):

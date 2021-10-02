@@ -24,6 +24,8 @@ class FmpuTrainer:
                             for _id , priorList, indexList, in zip(list(range(opt.num_clients)), priorlist, indexlist)]
         else:
             self.loader = DataLoader(opt)
+            test_dataset = self.loader(get_test)
+            # TODO: change to dataloader format
             self.load_data()
             self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda())
                             for _id in list(range(opt.num_clients))]
