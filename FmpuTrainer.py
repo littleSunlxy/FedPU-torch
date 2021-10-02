@@ -19,14 +19,14 @@ class FmpuTrainer:
             local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
 
             # create Clients and Aggregating Server
-            self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,  sample_size, opt.local_epochs,
-                                   opt.num_classes, priorList, indexList)
-                                for sample_size, _id , priorList, indexList, in zip(local_sample_sizes, list(range(opt.num_clients)), priorlist, indexlist)]
+            self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,
+                                   priorlist=priorList, indexlist=indexList)
+                            for _id , priorList, indexList, in zip(list(range(opt.num_clients)), priorlist, indexlist)]
         else:
-            local_dataloaders, local_sample_sizes, test_dataloader =
             self.loader = DataLoader(opt)
             self.load_data()
-            self.clients =
+            self.clients = [Client(_id, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader)
+                            for _id in zip(list(range(opt.num_clients)))]
 
         self.clientSelect_idxs = []
         # print(len(self.clients))

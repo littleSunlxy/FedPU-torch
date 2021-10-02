@@ -14,19 +14,18 @@ from loss import MPULoss, PLoss, MPULoss_INDEX
 
 
 class Client:
-    def __init__(self, client_id, model_pu, trainloader, testloader, samplesize, epoches, num_classes, priorlist, indexlist):
+    def __init__(self, client_id, model_pu, trainloader, testloader, priorlist=None, indexlist=None):
         self.client_id = client_id
         self.current_round = 0
         self.batches = len(self.train_loader)
         self.batches = opt.pu_batchsize
-        self.samplesize = samplesize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
         if opt.positiveIndex == '0':
-            self.loss = PLoss(num_classes).cuda()
+            self.loss = PLoss(opt.num_classes).cuda()
         if opt.positiveIndex == 'randomIndexList':
-            self.loss = MPULoss_INDEX(num_classes, opt.pu_weight).cuda()
-        self.ploss = PLoss(num_classes)
+            self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
+        self.ploss = PLoss(opt.num_classes)
         self.priorlist = priorlist
         self.indexlist = indexlist
         self.communicationRound = 0
@@ -38,14 +37,11 @@ class Client:
         if not opt.useFedmatchDataLoader:
             self.train_loader = trainloader
             self.test_loader = testloader
-            self.samplesize = samplesize
         else:
             # for Fedmatch
             self.state = {'client_id': client_id}
             self.loader = DataLoader(opt)
             self.load_data()
-
-        print(self.client_id, self.samplesize)
 
     def load_original_model(self):
         self.model = deepcopy(self.original_model)
