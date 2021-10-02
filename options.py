@@ -4,7 +4,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--pu_lr', type=float, default=0.1)
 parser.add_argument('--pu_weight_decay', type=float, default=5e-3)
-parser.add_argument('--pu_batchsize', type=int, default=1024)
+parser.add_argument('--pu_batchsize', type=int, default=500)
 parser.add_argument('--momentum', type=float, default=0.9)
 parser.add_argument('--dataset', type=str, default='MNIST')
 #parser.add_argument('--dataset', type=str, default='CIFAR10')
@@ -31,6 +31,13 @@ parser.add_argument('--classes_per_client', type=int, default=5)
 parser.add_argument('--clientSelect_Rate', type=float, default=0.5)
 parser.add_argument('--log_name', type=str, default='out.log')
 parser.add_argument('--imagename', type=str, default='5.23.6.jpg')
+
+
+#Fedmatch dataloader
+parser.add_argument('--useFedmatchDataLoader', action='store_true', default=False,
+                    help='use FedmatchDataLoader')
+parser.add_argument('--bsize_s', type=int, default=5)
+
 
 opt, _ = parser.parse_known_args()
 

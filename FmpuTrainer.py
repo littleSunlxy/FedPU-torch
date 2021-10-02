@@ -1,10 +1,11 @@
 from options import opt
-from client import Client
-from aggregator import Cloud
+from modules.client import Client
+from modules.aggregator import Cloud
 from dataSpilt import get_data_loaders
 import numpy as np
 import torch.optim as optim
 from multiprocessing.dummy import Pool as ThreadPool
+from datasets.loader import DataLoader
 import copy
 from loss import MPULoss
 import matplotlib.pyplot as plt
@@ -14,19 +15,33 @@ import torch
 class FmpuTrainer:
     def __init__(self, model_pu):
         # load data
+        if not opt.useFedmatchDataLoader:
+            local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
 
-        local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
-
-        # create Clients and Aggregating Server
-        self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,  sample_size, opt.local_epochs,
-                               opt.num_classes, priorList, indexList)
-                            for sample_size, _id , priorList, indexList, in zip(local_sample_sizes, list(range(opt.num_clients)), priorlist, indexlist)]
+            # create Clients and Aggregating Server
+            self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,  sample_size, opt.local_epochs,
+                                   opt.num_classes, priorList, indexList)
+                                for sample_size, _id , priorList, indexList, in zip(local_sample_sizes, list(range(opt.num_clients)), priorlist, indexlist)]
+        else:
+            local_dataloaders, local_sample_sizes, test_dataloader =
+            self.loader = DataLoader(opt)
+            self.load_data()
+            self.clients =
 
         self.clientSelect_idxs = []
         # print(len(self.clients))
         self.cloud = Cloud(self.clients, model_pu, opt.num_classes, test_dataloader)
         self.communication_rounds = opt.communication_rounds
         self.current_round = 0
+
+
+    def load_data(self):
+        # for Fedmatch dataloader
+        self.x_train, self.y_train, self.task_name = None, None, None
+        self.x_valid, self.y_valid =  self.loader.get_valid()
+        self.x_test, self.y_test =  self.loader.get_test()
+        self.x_test = self.loader.scale(self.x_test)
+        self.x_valid = self.loader.scale(self.x_valid)
 
 
     def begin_train(self):
