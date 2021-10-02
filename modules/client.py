@@ -64,7 +64,6 @@ class Client:
 
         batchsize = bsize_s + bsize_u
         transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
-        import pdb; pdb.set_trace()
         train_dataset = CustomImageDataset(train_x, train_y, transforms_train)
         test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
@@ -126,7 +125,7 @@ class Client:
         for epoch in range(opt.local_epochs):
 
             for i, (inputs, labels) in enumerate(self.train_loader):
-
+                import pdb; pdb.set_trace()
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_p.zero_grad()  # tidings清零
