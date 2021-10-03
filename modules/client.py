@@ -41,34 +41,36 @@ class Client:
             self.state = {'client_id': client_id}
             self.loader = DataLoader(opt)
             self.load_data()
-            self.train_loader, self.test_loader = self.getFedmatchLoader()
+            self.train_loader = self.getFedmatchLoader()
 
 
     def getFedmatchLoader(self):
-
-        self.x_test, self.y_test =  self.loader.get_test()
-        self.x_valid, self.y_valid =  self.loader.get_valid()
-        self.x_test = self.loader.scale(self.x_test)
-        self.x_valid = self.loader.scale(self.x_valid)
-
         bsize_s = opt.bsize_s
         num_steps = round(len(self.x_labeled)/bsize_s)
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
-        # sign the unlabeled data
-        self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
-        self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
 
-        # merge the S and U datasets
-        train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
-        train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
+        if 'SL' in opt.task:
+            # make all the data full labeled
+            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
+            self.y_unlabeled = torch.argmax(torch.from_numpy(self.y_unlabeled), -1).numpy()
+            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
+
+        else:
+            # sign the unlabeled data
+            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
+            self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
+
+            # merge the S and U datasets
+            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
 
         batchsize = bsize_s + bsize_u
-        transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
+        transforms_train, _ = get_default_data_transforms(opt.dataset, verbose=False)
         train_dataset = CustomImageDataset(train_x, train_y, transforms_train)
-        test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
-        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batchsize, shuffle=True)
-        return train_loader, test_loader
+
+        return train_loader
 
 
 

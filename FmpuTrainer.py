@@ -59,47 +59,27 @@ class FmpuTrainer:
 
 
     def begin_train(self):
-        print("Fmpu is going to train")
-        # import pdb
-        # pdb.set_trace()
-        for t in range (self.communication_rounds):
 
+        for t in range (self.communication_rounds):
             self.current_round = t + 1
             self.clients_select()
             # client train step
-            self.clients_train_step()   # memery up
+            if 'SL' in opt.task:
+                print("##### FedAvg SL is training #####")
+                self.clients_train_step_P()
+            else:
+                print("##### FedPU is training #####")
+                self.clients_train_step()   # memery up
 
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
 
-
             for client in self.clients:
                 client.model.load_state_dict(w_glob)
-            #
+
             self.cloud.model.load_state_dict(w_glob)
             self.cloud.validation(self.current_round)
-        #
-        #
-        # # 所有clients重新初始化
-        # for client in self.clients:
-        #     client.load_original_model()
-        #
-        # print("FL on Positive is going to train")
-        # FLAcc = []
-        # for t in range(self.communication_rounds):
-        #     print("\nround " + str(t)+" ")
-        #     self.current_round = t + 1
-        #     self.clients_select()
-        #     self.clients_train_step_P()
-        #     # self.clients_validation_step()
-        #     w_glob = self.cloud.aggregate(self.clientSelect_idxs)
-        #     for client in self.clients:
-        #         client.model.load_state_dict(w_glob)
-        #
-        #     self.cloud.model.load_state_dict(w_glob)
-        #     self.cloud.validation()
-        #
-        # plotAcc(FmpuAcc, FLAcc)
+
 
     def clients_select(self):
         m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
