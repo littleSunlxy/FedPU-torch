@@ -49,8 +49,6 @@ class Client:
         num_steps = round(len(self.x_labeled)/bsize_s)
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
 
-        import pdb; pdb.set_trace()
-
         if 'SL' in opt.method:
 
             # make all the data full labeled
