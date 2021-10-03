@@ -51,7 +51,7 @@ class Client:
 
         import pdb; pdb.set_trace()
 
-        if 'SL' in opt.task:
+        if 'SL' in opt.method:
 
             # make all the data full labeled
             self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()

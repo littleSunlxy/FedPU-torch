@@ -64,7 +64,7 @@ class FmpuTrainer:
             self.current_round = t + 1
             self.clients_select()
             # client train step
-            if 'SL' in opt.task:
+            if 'SL' in opt.method:
                 print("##### FedAvg SL is training #####")
                 self.clients_train_step_P()
             else:

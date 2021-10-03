@@ -38,7 +38,8 @@ parser.add_argument('--useFedmatchDataLoader', action='store_true', default=Fals
                     help='use FedmatchDataLoader')
 parser.add_argument('--bsize_s', type=int, default=5)
 parser.add_argument('--test_batchsize', type=int, default=500)
-parser.add_argument('--task', type=str, default='FedPU-iid') # FedPU-noniid / FedAVG-SL-iid / FedAVG-SL-noniid
+parser.add_argument('--task', type=str, default='lc-biid-c10')
+parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
 
 opt, _ = parser.parse_known_args()
 

@@ -22,7 +22,6 @@ class DataLoader:
             Wonyong Jeong (wyjeong@kaist.ac.kr)
         """
         args.dataset_path = '/home/hadoop-automl/cephfs/data/linxinyang/dataset/cifar10/'   # for datasets
-        args.task = 'lc-biid-c10'
         args.dataset_id_to_name = {0: 'cifar_10'}
         args.dataset_id = 0
 
