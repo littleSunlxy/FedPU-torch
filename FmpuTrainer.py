@@ -28,12 +28,13 @@ class FmpuTrainer:
             self.loader = DataLoader(opt)
             # test_dataset = self.loader(get_test)
             # TODO: change to dataloader format
-            indexlist = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]*10]
+            indexlist = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]*100]
             self.load_data()
             self.loader.get_test()
             _, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
             test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
             test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.test_batchsize, shuffle=True)
+            import pdb; pdb.set_trace()
             self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), indexlist=indexList)
                             for _id, indexList, in zip(list(range(opt.num_clients)), indexlist)]
             print("numclients:", opt.num_clients, "build clients:", len(self.clients))
