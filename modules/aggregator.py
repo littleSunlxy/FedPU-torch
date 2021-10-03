@@ -63,7 +63,6 @@ class Cloud:
             labels = labels.cuda()
             outputs = self.model(inputs)
             pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
-            import pdb; pdb.set_trace()
             correct += (pred == labels).sum().item()
         print('Accuracy: {:.4f} %'.format(100 * correct / len(self.test_loader.dataset)))
         return 100 * correct / len(self.test_loader.dataset)
