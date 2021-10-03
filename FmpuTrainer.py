@@ -76,7 +76,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
-            self.cloud.validation(self.communication_rounds)
+            self.cloud.validation(self.current_round)
         #
         #
         # # 所有clients重新初始化
