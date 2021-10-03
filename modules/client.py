@@ -36,12 +36,15 @@ class Client:
         if not opt.useFedmatchDataLoader:
             self.train_loader = trainloader
             self.test_loader = testloader
+            self.samplesize = self.train_loader.len()
         else:
             # for Fedmatch
             self.state = {'client_id': client_id}
             self.loader = DataLoader(opt)
             self.load_data()
             self.train_loader, self.test_loader = self.getFedmatchLoader()
+            import pdb; pdb.set_trace()
+            self.samplesize = self.train_loader.len()
 
 
     def getFedmatchLoader(self):
