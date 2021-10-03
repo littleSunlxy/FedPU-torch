@@ -62,13 +62,11 @@ class FmpuTrainer:
         # import pdb
         # pdb.set_trace()
         for t in range (self.communication_rounds):
-            print("\nround " + str(t)+" ")
 
             self.current_round = t + 1
             self.clients_select()
             # client train step
             self.clients_train_step()   # memery up
-
 
             self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
@@ -78,7 +76,7 @@ class FmpuTrainer:
                 client.model.load_state_dict(w_glob)
             #
             self.cloud.model.load_state_dict(w_glob)
-            self.cloud.validation()
+            self.cloud.validation(self.communication_rounds)
         #
         #
         # # 所有clients重新初始化

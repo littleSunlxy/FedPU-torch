@@ -55,7 +55,7 @@ class Cloud:
 
         return self.aggregated_client_model
 
-    def validation(self):
+    def validation(self, cur_rounds):
         self.model.eval()
         correct = 0
         for i, (inputs, labels) in enumerate(self.test_loader):
@@ -64,7 +64,7 @@ class Cloud:
             outputs = self.model(inputs)
             pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
             correct += (pred == labels).sum().item()
-        print('Accuracy: {:.4f} %'.format(100 * correct / len(self.test_loader.dataset)))
+        print('Round:{:f}, Accuracy: {:.4f} %'.format(cur_rounds, 100 * correct / len(self.test_loader.dataset)))
         return 100 * correct / len(self.test_loader.dataset)
 
 
