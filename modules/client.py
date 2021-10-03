@@ -124,7 +124,6 @@ class Client:
         self.model.train()
         for epoch in range(opt.local_epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
-                import pdb; pdb.set_trace()
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_p.zero_grad()  # tidings清零
