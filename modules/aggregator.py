@@ -59,7 +59,7 @@ class Cloud:
         self.model.eval()
         correct = 0
         for i, (inputs, labels) in enumerate(self.test_loader):
-            print("Test input img scale:", inputs.max(), inputs.min())
+            # print("Test input img scale:", inputs.max(), inputs.min())
             inputs = inputs.cuda()
             labels = labels.cuda()
             outputs = self.model(inputs)
