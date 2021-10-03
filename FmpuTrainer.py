@@ -33,7 +33,8 @@ class FmpuTrainer:
             self.load_data()
             self.loader.get_test()
             _, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
-            test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
+            # test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
+            test_dataset = CustomImageDataset(self.x_test.astype(np.float32)/255, self.y_test)
             test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.test_batchsize, shuffle=True)
 
             self.clients = [Client(_id, copy.deepcopy(model_pu).cuda(), priorlist=priorList, indexlist=indexList)

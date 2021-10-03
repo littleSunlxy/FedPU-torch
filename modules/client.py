@@ -68,7 +68,9 @@ class Client:
 
         batchsize = bsize_s + bsize_u
         transforms_train, _ = get_default_data_transforms(opt.dataset, verbose=False)
-        train_dataset = CustomImageDataset(train_x, train_y, transforms_train)
+        # train_dataset = CustomImageDataset(train_x, train_y, transforms_train)
+        # Ablation
+        train_dataset = CustomImageDataset(train_x.astype(np.float32)/255, train_y)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
 
         return train_loader
