@@ -61,6 +61,7 @@ class Client:
         # merge the S and U datasets
         train_x = np.concatenate((self.x_labeled, self.x_unlabeled),axis = 0)
         train_y = np.concatenate((self.y_labeled, self.y_unlabeled),axis = 0)
+        import pdb; pdb.set_trace()
 
         batchsize = bsize_s + bsize_u
         transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
