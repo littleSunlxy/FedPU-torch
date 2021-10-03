@@ -29,7 +29,7 @@ class FmpuTrainer:
             # test_dataset = self.loader(get_test)
             # TODO: change to dataloader format
             indexlist = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]] * 100
-            priorlist = [[[0.1] * 10]] * 100
+            priorlist = [[0.1] * 10] * 100
             self.load_data()
             self.loader.get_test()
             _, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
