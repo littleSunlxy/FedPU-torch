@@ -36,14 +36,12 @@ class Client:
         if not opt.useFedmatchDataLoader:
             self.train_loader = trainloader
             self.test_loader = testloader
-            self.samplesize = self.train_loader.__len__()
         else:
             # for Fedmatch
             self.state = {'client_id': client_id}
             self.loader = DataLoader(opt)
             self.load_data()
             self.train_loader, self.test_loader = self.getFedmatchLoader()
-            self.samplesize = self.train_loader.__len__()
 
 
     def getFedmatchLoader(self):
@@ -64,7 +62,6 @@ class Client:
         train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
         train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
 
-        import pdb; pdb.set_trace()
         batchsize = bsize_s + bsize_u
         transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
         train_dataset = CustomImageDataset(train_x, train_y, transforms_train)

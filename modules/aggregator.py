@@ -24,9 +24,10 @@ class Cloud:
         weight = []
         positive_totalsize = 0
         totalsize = 0
+        samplesize = 500
         for idx in clientSelect_idxs:
             client = self.clients[idx]
-            totalsize += client.samplesize
+            totalsize += samplesize
         #
         # for idx in clientSelect_idxs:
         #     client = self.clients[idx]
@@ -44,7 +45,7 @@ class Cloud:
 
         for k, idx in enumerate(clientSelect_idxs):
             client = self.clients[idx]
-            weight = client.samplesize / totalsize
+            weight = samplesize / totalsize
             # print(client.client_id, client.sample_size, self.total_client_data_size, weight)
             for name, param in client.model.state_dict().items():
                 if k == 0:
