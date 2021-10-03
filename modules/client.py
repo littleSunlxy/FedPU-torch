@@ -50,6 +50,7 @@ class Client:
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
 
         if 'SL' in opt.task:
+            import pdb; pdb.set_trace()
             # make all the data full labeled
             self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
             self.y_unlabeled = torch.argmax(torch.from_numpy(self.y_unlabeled), -1).numpy()
