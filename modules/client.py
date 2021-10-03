@@ -123,7 +123,6 @@ class Client:
     def train_P(self):
         self.model.train()
         for epoch in range(opt.local_epochs):
-
             for i, (inputs, labels) in enumerate(self.train_loader):
                 import pdb; pdb.set_trace()
                 inputs = inputs.cuda()

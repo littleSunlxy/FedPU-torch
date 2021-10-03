@@ -40,6 +40,7 @@ class CustomImageDataset(Dataset):
         img, label = self.inputs[index], self.labels[index]
 
         if self.transforms is not None:
+            import pdb; pdb.set_trace()
             img = self.transforms(img)
 
         return img, label
