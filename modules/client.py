@@ -61,8 +61,8 @@ class Client:
         self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
 
         # merge the S and U datasets
-        train_x = np.concatenate((self.x_labeled, self.x_unlabeled),axis = 0).transpose(0,3,1,2)
-        train_y = np.concatenate((self.y_labeled, self.y_unlabeled),axis = 0)
+        train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+        train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
 
         import pdb; pdb.set_trace()
         batchsize = bsize_s + bsize_u
