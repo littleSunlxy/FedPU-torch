@@ -100,6 +100,7 @@ class Client:
         self.model.train()
         for epoch in range(opt.local_epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
+                print("training input img scale:", inputs.max(), inputs.min())
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_pu.zero_grad()  # tidings清零

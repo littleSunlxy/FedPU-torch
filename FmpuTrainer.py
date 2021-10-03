@@ -53,6 +53,7 @@ class FmpuTrainer:
         self.x_valid, self.y_valid =  self.loader.get_valid()
         self.x_test, self.y_test =  self.loader.get_test()
         # self.x_test = self.loader.scale(self.x_test).transpose(0,3,1,2)
+        print("test img scale:", np.max(self.x_test), np.min(self.x_test))
         self.x_test = self.x_test.transpose(0,3,1,2)
         self.y_test = torch.argmax(torch.from_numpy(self.y_test), -1).numpy()
         self.x_valid = self.loader.scale(self.x_valid)
