@@ -29,14 +29,15 @@ class FmpuTrainer:
             # test_dataset = self.loader(get_test)
             # TODO: change to dataloader format
             indexlist = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]] * 100
+            priorlist = [[0.1*10]] * 100
             self.load_data()
             self.loader.get_test()
             _, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
             test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
             test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.test_batchsize, shuffle=True)
 
-            self.clients = [Client(_id, copy.deepcopy(model_pu).cuda(), indexlist=indexList)
-                            for _id, indexList, in zip(list(range(opt.num_clients)), indexlist)]
+            self.clients = [Client(_id, copy.deepcopy(model_pu).cuda(), priorlist=priorList, indexlist=indexList)
+                            for _id, priorList, indexList, in zip(list(range(opt.num_clients)), priorlist, indexlist)]
             print("numclients:", opt.num_clients, "build clients:", len(self.clients))
 
         self.clientSelect_idxs = []
