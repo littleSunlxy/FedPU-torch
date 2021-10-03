@@ -64,7 +64,7 @@ class Cloud:
             outputs = self.model(inputs)
             pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
             correct += (pred == labels).sum().item()
-        print('Round:{:f}, Accuracy: {:.4f} %'.format(cur_rounds, 100 * correct / len(self.test_loader.dataset)))
+        print('Round:{:d}, Accuracy: {:.4f} %'.format(cur_rounds, 100 * correct / len(self.test_loader.dataset)))
         return 100 * correct / len(self.test_loader.dataset)
 
 
