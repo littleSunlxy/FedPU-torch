@@ -17,10 +17,10 @@ from dataSpilt import get_data_loaders, get_default_data_transforms
 class FmpuTrainer:
     def __init__(self, model_pu):
         # load data
-        if not opt.useFedmatchDataLoader:
-            local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
 
+        if not opt.useFedmatchDataLoader:
             # create Clients and Aggregating Server
+            local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()
             self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), local_dataloaders[_id], test_dataloader,
                                    priorlist=priorList, indexlist=indexList)
                             for _id , priorList, indexList, in zip(list(range(opt.num_clients)), priorlist, indexlist)]
@@ -28,13 +28,14 @@ class FmpuTrainer:
             self.loader = DataLoader(opt)
             # test_dataset = self.loader(get_test)
             # TODO: change to dataloader format
+            indexlist = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]*10]
             self.load_data()
             self.loader.get_test()
             _, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
             test_dataset = CustomImageDataset(self.x_test, self.y_test, transforms_eval)
             test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=opt.test_batchsize, shuffle=True)
-            self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda())
-                            for _id in list(range(opt.num_clients))]
+            self.clients = [Client(_id + 1, copy.deepcopy(model_pu).cuda(), indexlist=indexList)
+                            for _id , indexList, in zip(list(range(opt.num_clients)), indexlist)]
 
         self.clientSelect_idxs = []
         # print(len(self.clients))
