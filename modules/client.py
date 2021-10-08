@@ -30,8 +30,8 @@ class Client:
         self.communicationRound = 0
         self.optimizer_pu = optim.SGD(self.model.parameters(), lr=opt.pu_lr, momentum=opt.momentum)
         self.scheduler = optim.lr_scheduler.StepLR(self.optimizer_pu, step_size=1, gamma=0.992)
-        self.optimizer_p = None
-        self.scheduler_p = None
+        self.optimizer_p = optim.SGD(self.model.parameters(), lr=opt.pu_lr, momentum=opt.momentum)
+        self.scheduler_p = optim.lr_scheduler.StepLR(self.optimizer_p, step_size=1, gamma=0.992)
 
         if not opt.useFedmatchDataLoader:
             self.train_loader = trainloader
