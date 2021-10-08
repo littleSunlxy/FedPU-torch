@@ -137,6 +137,8 @@ class Client:
                 loss = self.ploss(outputs, labels)
                 loss.backward()
                 self.optimizer_p.step()
+                if i == 0:
+                    print("epoch", epoch, "loss:", loss)
 
         self.communicationRound += 1
         self.scheduler_p.step()
