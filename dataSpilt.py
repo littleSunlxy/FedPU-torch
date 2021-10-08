@@ -301,7 +301,7 @@ def get_data_loaders(verbose=True):
 
     stats = [x.shape[0] for x, y in split]
 
-    return client_loaders, stats, test_loader, torch.Tensor(indexlist), torch.Tensor(priorlist)
+    return client_loaders, stats, test_loader, torch.Tensor(indexlist).gpu(), torch.Tensor(priorlist).gpu()
 
 
 
