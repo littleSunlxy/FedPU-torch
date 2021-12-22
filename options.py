@@ -44,8 +44,8 @@ parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
 opt, _ = parser.parse_known_args()
 
 
-FedAVG_model_path = '/workdir/linxinyang/experiment/cache/model/local_model'
-FedAVG_aggregated_model_path = '/workdir/linxinyang/experiment/cache/model/FedAVG_model.pth'
+FedAVG_model_path = '/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/cache/model/local_model'
+FedAVG_aggregated_model_path = '/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/cache/model/FedAVG_model.pth'
 
 # FedAVG_model_path = '/home/lxx-006/lxy/fmpu/cache/model/local_model'
 # FedAVG_aggregated_model_path = '/home/lxx-006/lxy/fmpu/cache/model/FedAVG_model.pth'
