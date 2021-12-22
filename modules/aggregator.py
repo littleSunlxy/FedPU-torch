@@ -24,9 +24,10 @@ class Cloud:
         weight = []
         positive_totalsize = 0
         totalsize = 0
+        samplesize = 500
         for idx in clientSelect_idxs:
             client = self.clients[idx]
-            totalsize += client.samplesize
+            totalsize += samplesize
         #
         # for idx in clientSelect_idxs:
         #     client = self.clients[idx]
@@ -44,7 +45,7 @@ class Cloud:
 
         for k, idx in enumerate(clientSelect_idxs):
             client = self.clients[idx]
-            weight = client.samplesize / totalsize
+            weight = samplesize / totalsize
             # print(client.client_id, client.sample_size, self.total_client_data_size, weight)
             for name, param in client.model.state_dict().items():
                 if k == 0:
@@ -54,16 +55,17 @@ class Cloud:
 
         return self.aggregated_client_model
 
-    def validation(self):
+    def validation(self, cur_rounds):
         self.model.eval()
         correct = 0
         for i, (inputs, labels) in enumerate(self.test_loader):
+            # print("Test input img scale:", inputs.max(), inputs.min())
             inputs = inputs.cuda()
             labels = labels.cuda()
             outputs = self.model(inputs)
             pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
             correct += (pred == labels).sum().item()
-        print('Accuracy: {:.4f} %'.format(100 * correct / len(self.test_loader.dataset)))
+        print('Round:{:d}, Accuracy: {:.4f} %'.format(cur_rounds, 100 * correct / len(self.test_loader.dataset)))
         return 100 * correct / len(self.test_loader.dataset)
 
 

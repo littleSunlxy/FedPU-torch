@@ -1,9 +1,11 @@
 import numpy as np
-from options import opt
 import torch
 import random
 from torch.utils.data.dataset import Dataset
 from torchvision import datasets, transforms
+
+from options import opt
+
 
 class DatasetSplit(Dataset):
     def __init__(self, dataset, idxs):
@@ -292,8 +294,6 @@ def get_data_loaders(verbose=True):
         train_dataset.append(dataset)
         count += len(indexList)
 
-
-
     print(indexlist)
 
     client_loaders = [torch.utils.data.DataLoader(
@@ -301,7 +301,7 @@ def get_data_loaders(verbose=True):
 
     stats = [x.shape[0] for x, y in split]
 
-    return client_loaders, stats, test_loader, indexlist, priorlist
+    return client_loaders, stats, test_loader, torch.Tensor(indexlist).cuda(), torch.Tensor(priorlist).cuda()
 
 
 

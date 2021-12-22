@@ -1,6 +1,3 @@
-"""
-client in Fmpu
-"""
 import time
 import torch
 from torch import nn
@@ -8,34 +5,77 @@ from copy import deepcopy
 import torch.optim as optim
 from pylab import *
 import matplotlib.pyplot as plt
+
 from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
 from loss import MPULoss, PLoss, MPULoss_INDEX
+from datasets.loader import DataLoader
+from dataSpilt import CustomImageDataset, get_default_data_transforms
 
 
 class Client:
-    def __init__(self, client_id, model_pu, trainloader, testloader, samplesize, epoches, num_classes, priorlist, indexlist):
+    def __init__(self, client_id, model_pu, trainloader=None, testloader=None, priorlist=None, indexlist=None):
         self.client_id = client_id
-        self.train_loader = trainloader
-        self.test_loader = testloader
         self.current_round = 0
-        self.batches = len(self.train_loader)
-        self.samplesize = samplesize
+        self.batches = opt.pu_batchsize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
         if opt.positiveIndex == '0':
-            self.loss = PLoss(num_classes).cuda()
+            self.loss = PLoss(opt.num_classes).cuda()
         if opt.positiveIndex == 'randomIndexList':
-            self.loss = MPULoss_INDEX(num_classes, opt.pu_weight).cuda()
-        self.ploss = PLoss(num_classes)
+            self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
+        self.ploss = PLoss(opt.num_classes)
         self.priorlist = priorlist
         self.indexlist = indexlist
         self.communicationRound = 0
         self.optimizer_pu = optim.SGD(self.model.parameters(), lr=opt.pu_lr, momentum=opt.momentum)
         self.scheduler = optim.lr_scheduler.StepLR(self.optimizer_pu, step_size=1, gamma=0.992)
-        self.optimizer_p = None
-        self.scheduler_p = None
-        print(self.client_id, self.samplesize)
+        self.optimizer_p = optim.SGD(self.model.parameters(), lr=opt.pu_lr, momentum=opt.momentum)
+        self.scheduler_p = optim.lr_scheduler.StepLR(self.optimizer_p, step_size=1, gamma=0.992)
+
+        if not opt.useFedmatchDataLoader:
+            self.train_loader = trainloader
+            self.test_loader = testloader
+        else:
+            # for Fedmatch
+            self.state = {'client_id': client_id}
+            self.loader = DataLoader(opt)
+            self.load_data()
+            self.train_loader = self.getFedmatchLoader()
+
+
+    def getFedmatchLoader(self):
+        bsize_s = opt.bsize_s
+        num_steps = round(len(self.x_labeled)/bsize_s)
+        bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
+
+        if 'SL' in opt.method:
+            self.load_original_model()
+            # make all the data full labeled
+            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
+            self.y_unlabeled = torch.argmax(torch.from_numpy(self.y_unlabeled), -1).numpy()
+            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
+
+        else:
+            # sign the unlabeled data
+            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
+            self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
+
+            # merge the S and U datasets
+            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
+
+        batchsize = bsize_s + bsize_u
+        transforms_train, _ = get_default_data_transforms(opt.dataset, verbose=False)
+        # train_dataset = CustomImageDataset(train_x, train_y, transforms_train)
+        # Ablation
+        train_dataset = CustomImageDataset(train_x.astype(np.float32)/255, train_y)
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize, shuffle=True)
+
+        return train_loader
+
+
 
     def load_original_model(self):
         self.model = deepcopy(self.original_model)
@@ -48,14 +88,24 @@ class Client:
         if os.path.exists(FedAVG_aggregated_model_path):
             self.model.load_state_dict(torch.load(FedAVG_aggregated_model_path))
 
+
+    def load_data(self):
+        '''use FedMatch dataloader'''
+        self.x_labeled, self.y_labeled, task_name = \
+                self.loader.get_s_by_id(self.state['client_id'])
+        self.x_unlabeled, self.y_unlabeled, task_name = \
+                self.loader.get_u_by_id(self.state['client_id'], task_id=0)
+        self.x_test, self.y_test =  self.loader.get_test()
+        self.x_valid, self.y_valid =  self.loader.get_valid()
+        self.x_test = self.loader.scale(self.x_test)
+        self.x_valid = self.loader.scale(self.x_valid)
+
+
     def train_pu(self):
-
         self.model.train()
-
         for epoch in range(opt.local_epochs):
-
             for i, (inputs, labels) in enumerate(self.train_loader):
-
+                # print("training input img scale:", inputs.max(), inputs.min())
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_pu.zero_grad()  # tidings清零
@@ -68,24 +118,18 @@ class Client:
                     loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
-                # if i == 0:
-                #     print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
+                if i == 0:
+                    print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
                 self.optimizer_pu.step()
-
-
 
         self.communicationRound+=1
         self.scheduler.step()
 
 
-
     def train_P(self):
-
         self.model.train()
         for epoch in range(opt.local_epochs):
-
             for i, (inputs, labels) in enumerate(self.train_loader):
-
                 inputs = inputs.cuda()
                 labels = labels.cuda()
                 self.optimizer_p.zero_grad()  # tidings清零
@@ -93,6 +137,8 @@ class Client:
                 loss = self.ploss(outputs, labels)
                 loss.backward()
                 self.optimizer_p.step()
+                if i == 0:
+                    print("epoch", epoch, "loss:", loss)
 
         self.communicationRound += 1
         self.scheduler_p.step()
@@ -113,6 +159,8 @@ class Client:
         print('Accuracy of the {} on the testing sets: {:.4f} %%'.format(self.client_id, 100 * correct / total))
         return 100 * correct / total
 
+
+
     def cal_trainAcc(self):
         self.model.eval()
         correct = 0
@@ -130,30 +178,6 @@ class Client:
             break
         print('Accuracy of the {} on the training sets: {:.4f} %%'.format(self.client_id, 100 * correct / total))
         return 100.0 * correct / total
-
-def plotAcc(trainPosAcc, trainAcc, testAcc, Ploss, Uloss):
-    epochs = list(range(len(trainAcc)))
-    plt.plot(epochs, trainAcc, color='r', label='Train Accuracy')  # r表示红色
-    plt.plot(epochs, trainPosAcc, color='sandybrown', label='Train_Pos Accuracy')  # r表示红色
-    plt.plot(epochs, testAcc, color='sienna', label='Test Accuracy')  # 蓝色
-    plt.plot(epochs, Ploss, color='teal', linestyle='-', label='Positive Loss*5')  # r表示红色
-    plt.plot(epochs, Uloss, color='c', linestyle='-', label='Unlabeled Loss*5')  # r表示红色
-
-
-    #####非必须内容#########
-    plt.xlabel('epochs')  # x轴表示
-    plt.ylabel('Accuracy')  # y轴表示
-    plt.title("MPU training using P and U")  # 图标标题表示
-    plt.legend()  # 每条折线的label显示
-
-    plt.axhline(y=90.78, c='k', ls='--', lw=1)
-
-    plt.annotate(s='90.78%', xy=(0, 90.78), xytext=(0, 91))
-    plt.ylim(0, 100)
-
-    #######################
-    plt.savefig('mpuAcc_from_00.jpg')  # 保存图片，路径名为test.jpg
-    plt.show()  # 显示图片
 
 
 
