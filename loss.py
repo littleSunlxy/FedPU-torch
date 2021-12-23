@@ -123,6 +123,9 @@ class MPULoss_V2(nn.Module):
     def forward(self, outputs, labels, priorlist, indexlist):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
+        new_P_indexlist =  torch.zeros(self.numClass).cuda()
+        for i in indexlist:
+            new_P_indexlist[i] += 1
         # 数据划分
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         labelsP = torch.index_select(labels, 0, P_mask)
@@ -135,19 +138,27 @@ class MPULoss_V2(nn.Module):
 
         PULoss = torch.zeros(1).cuda()
 
-        import pdb; pdb.set_trace()
+
+        # outputsU_Soft.size()/ outputsU.size() : [1011, 10]
+        PU3 = torch.zeros(1).cuda()
+        PU1 = torch.zeros(1).cuda()
         for i in range(self.numClass):
             if i in indexlist:      # calculate ui
                 pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + 0.01)) / \
                       max(1, outputsU.size(0)) / len(indexlist)
-                PULoss += pu3
+                PU3 += pu3
             else:
                 pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + 0.01)) * \
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
-                PULoss += pu1
+                PU1 += pu1
 
-        # pu3 =
-        # pu1 =
+        pu3 = sum(-torch.log(1 - outputsU_Soft + 0.01) * new_P_indexlist) / \
+                              max(1, outputsU.size(0)) / len(indexlist)
+        pu1 = sum(-torch.log(1 - outputsP_Soft + 0.01) * new_P_indexlist) * \
+             priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
+        print("puloss 3:", PU3, pu3)
+        print("puloss 1:", PU1, pu1)
+        import pdb; pdb.set_trace()
 
         pu2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
