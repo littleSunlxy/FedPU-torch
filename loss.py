@@ -125,7 +125,7 @@ class MPULoss_V2(nn.Module):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
-        label_onehot = torch.sparse.torch.eye(self.numClass).index_select(0,labels)
+        label_onehot = torch.sparse.torch.eye(self.numClass).cuda().index_select(0,labels)
         eps = 1e-6
         # import pdb; pdb.set_trace()
         indexlist = indexlist.long()
