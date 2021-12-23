@@ -124,6 +124,7 @@ class MPULoss_V2(nn.Module):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
+        eps = 1e-6
         # import pdb; pdb.set_trace()
         indexlist = indexlist.long()
         for i in indexlist:
@@ -146,18 +147,18 @@ class MPULoss_V2(nn.Module):
         PU1 = torch.zeros(1).cuda()
         for i in range(self.numClass):
             if i in indexlist:      # calculate ui
-                pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + 0.01)) / \
+                pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + eps)) / \
                       max(1, outputsU.size(0)) / len(indexlist)
                 PU3 += pu3
             else:
-                pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + 0.01)) * \
+                pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + eps)) * \
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
                 PU1 += pu1
 
         import pdb; pdb.set_trace()
-        pu3 = sum(-torch.log(1 - outputsU_Soft + 0.01) * new_P_indexlist) / \
+        pu3 = (-torch.log(1 - outputsU_Soft + eps) * new_P_indexlist).sum() / \
                               max(1, outputsU.size(0)) / len(indexlist)
-        pu1 = sum(-torch.log(1 - outputsP_Soft + 0.01) * new_P_indexlist) * \
+        pu1 = (-torch.log(1 - outputsP_Soft + eps) * new_P_indexlist).sum() * \
              priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
         print("puloss 3:", PU3, pu3)
         print("puloss 1:", PU1, pu1)
