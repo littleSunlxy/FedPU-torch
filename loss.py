@@ -126,7 +126,7 @@ class MPULoss_V2(nn.Module):
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
         import pdb; pdb.set_trace()
-        label_onehot = torch.index_select(torch.sparse.torch.eye(self.numClass).cuda(), 0, labels)
+        label_onehot = torch.zeros(labels.size(0), self.numClass).scatter_(1, labels, 1)
         eps = 1e-6
         # import pdb; pdb.set_trace()
         indexlist = indexlist.long()
@@ -172,3 +172,15 @@ class MPULoss_V2(nn.Module):
         # objective = PULoss * self.puW + crossloss
 
         return objective, PULoss * self.puW, crossloss
+
+
+import torch as t
+import numpy as np
+
+batch_size = 2048
+class_num = 10
+label = np.random.randint(0,class_num,size=(batch_size,1))
+label = t.LongTensor(label)
+
+y_one_hot = t.zeros(batch_size,class_num).scatter_(1,label,1)
+print(y_one_hot)
