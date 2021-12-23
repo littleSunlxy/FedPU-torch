@@ -2,21 +2,17 @@
 <project version="4">
   <component name="PublishConfigData" autoUpload="Always" serverName="hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000 password">
     <serverData>
-      <paths name="50.mt">
-        <serverdata>
-          <mappings>
-            <mapping deploy="experiment" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="hadoop-automl@zw03-data-hdp-dn-a100-gpu0050.mt:8000 password">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/tmp/pycharm_project_318" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="linxinyang@202.117.10.254:8022">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/linxinyang/fedpu_Final" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/venv/" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="linxinyang@202.117.10.254:8022 (1)">
         <serverdata>
           <mappings>
             <mapping deploy="/home/linxinyang/fedpu_Final" local="$PROJECT_DIR$" />
