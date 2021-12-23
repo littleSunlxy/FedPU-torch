@@ -158,10 +158,10 @@ class MPULoss_V2(nn.Module):
 
         PULoss -= PU2 / max(1, outputsP.size(0))
 
-        pu2 =
-        log_res = -torch.log(1 - outputsP_Soft * labels_onehot + eps)
-        PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
-        PULoss = (PULoss_1 + PULoss_2 + PULoss_3) * self.PU_weight
+        # # pu2 =
+        # log_res = -torch.log(1 - outputsP_Soft * labels_onehot + eps)
+        # PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
+        # PULoss = (PULoss_1 + PULoss_2 + PULoss_3) * self.PU_weight
 
         crossentropyloss=nn.CrossEntropyLoss()
         crossloss = crossentropyloss(outputsP, labelsP)
