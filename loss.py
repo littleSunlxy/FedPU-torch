@@ -159,19 +159,8 @@ class MPULoss_V2(nn.Module):
         crossentropyloss=nn.CrossEntropyLoss()
         crossloss = crossentropyloss(outputsP, labelsP)
 
-        objective = PULoss * self.puW
+        # objective = PULoss * self.puW
+        objective = crossloss
         # objective = PULoss * self.puW + crossloss
 
         return objective, PULoss * self.puW, crossloss
-
-
-import torch as t
-import numpy as np
-
-batch_size = 2048
-class_num = 10
-label = np.random.randint(0,class_num,size=(batch_size,1))
-label = t.LongTensor(label)
-
-y_one_hot = t.zeros(batch_size,class_num).scatter_(1,label,1)
-print(y_one_hot)
