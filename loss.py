@@ -154,13 +154,14 @@ class MPULoss_V2(nn.Module):
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
                 PU1 += pu1
 
+        import pdb; pdb.set_trace()
         pu3 = sum(-torch.log(1 - outputsU_Soft + 0.01) * new_P_indexlist) / \
                               max(1, outputsU.size(0)) / len(indexlist)
         pu1 = sum(-torch.log(1 - outputsP_Soft + 0.01) * new_P_indexlist) * \
              priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
         print("puloss 3:", PU3, pu3)
         print("puloss 1:", PU1, pu1)
-        import pdb; pdb.set_trace()
+
 
         pu2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
