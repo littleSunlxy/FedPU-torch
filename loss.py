@@ -161,7 +161,7 @@ class MPULoss_V2(nn.Module):
         import pdb; pdb.set_trace()
         label_onehot_P = torch.zeros(labelsP.size(0), self.numClass*2).cuda().scatter_(1, torch.unsqueeze(labelsP,1), 1)[:, :self.numClass]
 
-        log_res = -torch.log(1 - outputsP_Soft * label_onehot + eps)
+        log_res = -torch.log(1 - outputsP_Soft * label_onehot_P + eps)
         PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
         print("pu2", PULoss_2, PU2/max(1, outputsP.size(0)))
 
