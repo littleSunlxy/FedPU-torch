@@ -23,7 +23,9 @@ class Client:
         if opt.positiveIndex == '0':
             self.loss = PLoss(opt.num_classes).cuda()
         if opt.positiveIndex == 'randomIndexList':
-            self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
+            # self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
+            self.loss = MPULoss_V2(opt.num_classes, opt.pu_weight).cuda()
+
         self.ploss = PLoss(opt.num_classes)
         self.priorlist = priorlist
         self.indexlist = indexlist

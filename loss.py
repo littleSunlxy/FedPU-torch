@@ -128,8 +128,6 @@ class MPULoss_V2(nn.Module):
         labelsP = torch.index_select(labels, 0, P_mask)
         outputsP = torch.index_select(outputs, 0, P_mask)
         outputsP_Soft = torch.index_select(outputs_Soft, 0, P_mask)
-        # import pdb; pdb.set_trace()
-
 
         U_mask = (labels > self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         outputsU = torch.index_select(outputs, 0, U_mask)               #  unlabeldata 的 ground truth. setting限制不能使用
@@ -137,6 +135,7 @@ class MPULoss_V2(nn.Module):
 
         PULoss = torch.zeros(1).cuda()
 
+        import pdb; pdb.set_trace()
         for i in range(self.numClass):
             if i in indexlist:      # calculate ui
                 pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + 0.01)) / \
@@ -147,7 +146,8 @@ class MPULoss_V2(nn.Module):
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
                 PULoss += pu1
 
-
+        pu3 =
+        pu1 =
 
         pu2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
