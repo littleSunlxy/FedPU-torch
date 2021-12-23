@@ -142,35 +142,26 @@ class MPULoss_V2(nn.Module):
 
         PULoss = torch.zeros(1).cuda()
 
-
-        # outputsU_Soft.size()/ outputsU.size() : [1011, 10]
-        PU3 = torch.zeros(1).cuda()
-        PU1 = torch.zeros(1).cuda()
-        for i in range(self.numClass):
-            if i in indexlist:      # calculate ui
-                pu3 = sum(-torch.log(1 - outputsU_Soft[:, i] + eps)) / \
-                      max(1, outputsU.size(0)) / len(indexlist)
-                PU3 += pu3
-            else:
-                pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + eps)) * \
-                      priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
-                PU1 += pu1
-
-        import pdb; pdb.set_trace()
         pu3 = (-torch.log(1 - outputsU_Soft + eps) * new_P_indexlist).sum() / \
                               max(1, outputsU.size(0)) / len(indexlist)
-        pu1 = (-torch.log(1 - outputsP_Soft + eps) * new_P_indexlist).sum() * \
-             priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
-        print("puloss 3:", PU3, pu3)
-        print("puloss 1:", PU1, pu1)
+        PULoss += pu3
+        if self.numClass > len(indexlist):
+            pu1 = (-torch.log(1 - outputsP_Soft + eps) * new_P_indexlist).sum() * \
+                 priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
+            PULoss += pu1
 
-
-        pu2 = torch.zeros(1).cuda()
+        import pdb; pdb.set_trace()
+        PU2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
             x = outputsP_Soft[index][i]
-            pu2 += -torch.log(1 - x + 0.01) * priorlist[i]
+            PU2 += -torch.log(1 - x + 0.01) * priorlist[i]
 
-        PULoss -= pu2 / max(1, outputsP.size(0))
+        PULoss -= PU2 / max(1, outputsP.size(0))
+
+        pu2 =
+        log_res = -torch.log(1 - outputsP_Soft * labels_onehot + eps)
+        PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
+        PULoss = (PULoss_1 + PULoss_2 + PULoss_3) * self.PU_weight
 
         crossentropyloss=nn.CrossEntropyLoss()
         crossloss = crossentropyloss(outputsP, labelsP)
