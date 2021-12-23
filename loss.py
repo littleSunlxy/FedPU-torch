@@ -154,7 +154,7 @@ class MPULoss_V2(nn.Module):
         PU2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
             x = outputsP_Soft[index][i]
-            PU2 += -torch.log(1 - x + 0.01) * priorlist[i]
+            PU2 += -torch.log(1 - x + eps) * priorlist[i]
 
         PULoss -= PU2 / max(1, outputsP.size(0))
 
