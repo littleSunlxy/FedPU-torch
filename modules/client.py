@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from options import opt
 from options import FedAVG_model_path, FedAVG_aggregated_model_path
-from loss import MPULoss, PLoss, MPULoss_INDEX
+from loss import MPULoss, PLoss, MPULoss_INDEX, MPULoss_V2
 from datasets.loader import DataLoader
 from dataSpilt import CustomImageDataset, get_default_data_transforms
 
