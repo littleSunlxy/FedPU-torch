@@ -297,7 +297,7 @@ def get_data_loaders(verbose=True):
     print(indexlist)
 
     client_loaders = [torch.utils.data.DataLoader(
-            data, batch_size=opt.pu_batchsize, shuffle=True) for data in train_dataset]
+            data, batch_size=opt.pu_batchsize, num_workers=16, shuffle=True) for data in train_dataset]
 
     stats = [x.shape[0] for x, y in split]
 
