@@ -124,8 +124,8 @@ class MPULoss_V2(nn.Module):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
-        import pdb; pdb.set_trace()
-        for i in indexlist:
+        # import pdb; pdb.set_trace()
+        for i in indexlist.long():
             new_P_indexlist[i] += 1
         # 数据划分
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
