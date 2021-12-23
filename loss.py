@@ -126,10 +126,11 @@ class MPULoss_V2(nn.Module):
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
         eps = 1e-6
-        # import pdb; pdb.set_trace()
+
         indexlist = indexlist.long()
         for i in indexlist:
             new_P_indexlist[i] += 1
+
         # 数据划分
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         labelsP = torch.index_select(labels, 0, P_mask)
@@ -150,24 +151,13 @@ class MPULoss_V2(nn.Module):
                  priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
             PULoss += pu1
 
-
-        PU2 = torch.zeros(1).cuda()
-        for index, i in enumerate(labelsP):   # need to be optimized
-            x = outputsP_Soft[index][i]
-            PU2 += -torch.log(1 - x + eps) * priorlist[i]
-
-        PULoss -= PU2 / max(1, outputsP.size(0))
-
-        import pdb; pdb.set_trace()
         label_onehot_P = torch.zeros(labelsP.size(0), self.numClass*2).cuda().scatter_(1, torch.unsqueeze(labelsP,1), 1)[:, :self.numClass]
-
         log_res = -torch.log(1 - outputsP_Soft * label_onehot_P + eps)
-        PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
-        print("pu2", PULoss_2, PU2/max(1, outputsP.size(0)))
+        pu2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
+        PULoss += pu2
 
         crossentropyloss=nn.CrossEntropyLoss()
         crossloss = crossentropyloss(outputsP, labelsP)
-        import pdb; pdb.set_trace()
 
         objective = PULoss * self.puW
         # objective = PULoss * self.puW + crossloss
