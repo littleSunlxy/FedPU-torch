@@ -146,8 +146,8 @@ class MPULoss_V2(nn.Module):
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
                 PULoss += pu1
 
-        pu3 =
-        pu1 =
+        # pu3 =
+        # pu1 =
 
         pu2 = torch.zeros(1).cuda()
         for index, i in enumerate(labelsP):   # need to be optimized
