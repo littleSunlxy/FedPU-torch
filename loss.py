@@ -125,8 +125,6 @@ class MPULoss_V2(nn.Module):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
         new_P_indexlist =  torch.zeros(self.numClass).cuda()
-        import pdb; pdb.set_trace()
-        label_onehot = torch.zeros(labels.size(0), self.numClass).cuda().scatter_(1, torch.unsqueeze(labels,1), 1)
         eps = 1e-6
         # import pdb; pdb.set_trace()
         indexlist = indexlist.long()
@@ -159,6 +157,9 @@ class MPULoss_V2(nn.Module):
             PU2 += -torch.log(1 - x + 0.01) * priorlist[i]
 
         PULoss -= PU2 / max(1, outputsP.size(0))
+
+        import pdb; pdb.set_trace()
+        label_onehot = torch.zeros(labels.size(0), self.numClass*2).cuda().scatter_(1, torch.unsqueeze(labels,1), 1)[:, :self.numClass]
 
         log_res = -torch.log(1 - outputsP_Soft * label_onehot + eps)
         PULoss_2 = -(log_res.permute(0, 1) * priorlist).sum() / max(1, outputsP.size(0))
