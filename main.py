@@ -13,6 +13,7 @@ def main():
     if opt.dataset == 'MNIST':
         trainer = FmpuTrainer(CNNMnist().cuda())
     if opt.dataset == 'CIFAR10':
+        import pdb; pdb.set_trace()
         trainer = FmpuTrainer(ResNet9().cuda())
         #trainer = FmpuTrainer(CNNCifar(opt).cuda())
     # trainer = FmpuTrainer(MLP(dim_in=784, dim_hidden=200, dim_out=10).cuda())
