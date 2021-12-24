@@ -252,8 +252,6 @@ def get_data_loaders(verbose=True):
     count = 0
     randomIndex_num = [4,4,3,3,2,2,1,1,1,1]
 
-    import pdb;
-    pdb.set_trace()
     for i, (x, y) in enumerate(split):
         indexList = []
         dataset = CustomImageDataset(x, y, transforms_train)
@@ -264,6 +262,8 @@ def get_data_loaders(verbose=True):
         for l in dataset.labels:
             samplesize[l] += 1
 
+        import pdb;
+        pdb.set_trace()
         if opt.P_Index_accordance:          # indexlist长度一致
             for j in range(opt.randomIndex_num):
                 k = 0
@@ -295,6 +295,7 @@ def get_data_loaders(verbose=True):
         dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
         train_dataset.append(dataset)
         count += len(indexList)
+
 
     print(indexlist)
 
