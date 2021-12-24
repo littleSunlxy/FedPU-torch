@@ -267,7 +267,7 @@ def get_data_loaders(verbose=True):
                 k = 0
                 while True:
                     index = (count + j + k) % opt.num_classes
-                    if j==9:
+                    if i==9:
                         import pdb; pdb.set_trace()
                     if (i == (opt.num_clients - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
                             and index not in indexList:
