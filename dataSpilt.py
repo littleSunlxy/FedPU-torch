@@ -262,8 +262,6 @@ def get_data_loaders(verbose=True):
         for l in dataset.labels:
             samplesize[l] += 1
 
-        import pdb;
-        pdb.set_trace()
         if opt.P_Index_accordance:          # indexlist长度一致
             for j in range(opt.randomIndex_num):
                 k = 0
@@ -290,8 +288,6 @@ def get_data_loaders(verbose=True):
                         break
                     k += 1
 
-        import pdb;
-        pdb.set_trace()
         label_dict, unlabel_dict, priorList = puSpilt_index(dataset, indexList, samplesize)
         priorlist.append(priorList)
         indexlist.append(indexList)
