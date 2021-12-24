@@ -274,6 +274,8 @@ def get_data_loaders(verbose=True):
                         indexList.append(index)
                         selectcount[index] += 1
                         break
+                    elif k > opt.num_classes:
+                        break
                     k += 1
         else:
             for j in range(randomIndex_num[i]):
@@ -283,6 +285,8 @@ def get_data_loaders(verbose=True):
                     if samplesize[index] > 40 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
                         indexList.append(index)
                         selectcount[index] += 1
+                        break
+                    elif k > opt.num_classes:
                         break
                     k += 1
 
