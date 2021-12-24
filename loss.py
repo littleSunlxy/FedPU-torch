@@ -95,7 +95,6 @@ class MPULoss_INDEX(nn.Module):
             else:
                 pu1 = sum(-torch.log(1 - outputsP_Soft[:, i] + 0.01)) * \
                       priorlist[indexlist[0]] / max(1, outputsP.size(0)) / (self.numClass-len(indexlist))
-                import pdb; pdb.set_trace()
                 PULoss += pu1
 
         pu2 = torch.zeros(1).cuda()

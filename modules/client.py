@@ -117,11 +117,12 @@ class Client:
                 if opt.positiveIndex == '0':
                     loss = self.loss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
-                    loss, ploss, uloss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+                    loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
                 if i == 0:
-                    print("epoch", epoch, "loss:", loss, "ploss", ploss, "uloss", uloss)
+                    print('epoch:{}, {:.3f} loss: {:.3f}, puloss: {:.3f}, CEloss: {:.3f}'
+                          .format(epoch, loss.data, puloss.data, celoss.data))
                 self.optimizer_pu.step()
 
         self.communicationRound+=1

@@ -89,7 +89,6 @@ class FmpuTrainer:
 
     def clients_train_step(self):
         for idx in self.clientSelect_idxs:
-            import pdb; pdb.set_trace()
             self.clients[idx].train_pu()
 
     def clients_train_step_P(self):
