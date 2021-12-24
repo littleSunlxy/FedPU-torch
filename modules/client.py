@@ -121,7 +121,7 @@ class Client:
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
                 if i == 0:
-                    print('epoch:{} loss: {:.3f}, puloss: {:.3f}, CEloss: {:.3f}'.format(epoch, loss, puloss, celoss))
+                    print('epoch:{} loss: {:f}, puloss: {:f}, CEloss: {:f}'.format(epoch, loss, puloss, celoss))
                 self.optimizer_pu.step()
 
         self.communicationRound+=1
