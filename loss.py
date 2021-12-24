@@ -159,8 +159,8 @@ class MPULoss_V2(nn.Module):
         crossentropyloss=nn.CrossEntropyLoss()
         crossloss = crossentropyloss(outputsP, labelsP)
 
-        # objective = PULoss * self.puW
-        objective = crossloss
+        objective = PULoss * self.puW
+        # objective = crossloss
         # objective = PULoss * self.puW + crossloss
 
         return objective, PULoss * self.puW, crossloss
