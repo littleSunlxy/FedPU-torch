@@ -1,5 +1,6 @@
 import os
 import torch
+import numpy as np
 from options import opt
 from model import CNNMnist, CNNCifar, ResNet34, ResNet9
 from FmpuTrainer import FmpuTrainer
@@ -26,5 +27,5 @@ def main():
 
 if __name__ == '__main__':
     # merge config
-
+    torch.set_printoptions(threshold=np.inf)
     main()
