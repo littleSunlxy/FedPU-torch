@@ -150,7 +150,7 @@ class Client:
                     # update the proximal term
                     # proximal_term += torch.sum(torch.abs((w-w_t)**2))
 
-                    proximal_term += (w - w_t).norm(2)
+                    proximal_term += (w[1] - w_t[1]).norm(2)
 
                 loss = loss + (mu / 2) * proximal_term
 
