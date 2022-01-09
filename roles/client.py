@@ -1,16 +1,13 @@
-import time
 import torch
-from torch import nn
 from copy import deepcopy
 import torch.optim as optim
 from pylab import *
-import matplotlib.pyplot as plt
 
 from options import opt
-from options import FedAVG_model_path, FedAVG_aggregated_model_path
-from loss import MPULoss, PLoss, MPULoss_INDEX, MPULoss_V2
+from options import FedAVG_aggregated_model_path
+from modules.loss import PLoss, MPULoss_V2
 from datasets.loader import DataLoader
-from dataSpilt import CustomImageDataset, get_default_data_transforms
+from datasets.dataSpilt import CustomImageDataset, get_default_data_transforms
 
 
 class Client:
@@ -126,6 +123,42 @@ class Client:
 
         self.communicationRound+=1
         self.scheduler.step()
+
+    def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
+        self.model.train()
+        for epoch in range(epochs):
+            for i, (inputs, labels) in enumerate(self.train_loader):
+                # print("training input img scale:", inputs.max(), inputs.min())
+                inputs = inputs.cuda()
+                labels = labels.cuda()
+                self.optimizer_pu.zero_grad()  # tidings清零
+                outputs = self.model(inputs)  # on cuda 0
+                # print(outputs.dtype, outputs.device)
+
+                if opt.positiveIndex == '0':
+                    loss = self.loss(outputs, labels)
+                if opt.positiveIndex == 'randomIndexList':
+                    loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+
+                proximal_term = 0.0
+                # iterate through the current and global model parameters
+                for w, w_t in zip(self.model.parameters(), globalmodel.parameters()):
+                    # update the proximal term
+                    # proximal_term += torch.sum(torch.abs((w-w_t)**2))
+                    proximal_term += (w - w_t).norm(2)
+
+                loss = loss + (mu / 2) * proximal_term
+
+                loss.backward()
+                if i == 0:
+                    print('epoch:{} loss: {:.4f}, puloss: {:.4f}, celoss: {:.4f}'.format(epoch, loss.item(),
+                                                                                         puloss.item(), celoss.item()))
+                self.optimizer_pu.step()
+
+        self.communicationRound += 1
+        self.scheduler.step()
+
+
 
 
     def train_P(self):

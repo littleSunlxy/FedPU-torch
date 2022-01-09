@@ -20,33 +20,15 @@ class Cloud:
         self.aggregated_client_model = {}
 
     def aggregate(self, clientSelect_idxs):
-        w_locals = []
-        weight = []
-        positive_totalsize = 0
         totalsize = 0
         samplesize = 500
         for idx in clientSelect_idxs:
-            client = self.clients[idx]
             totalsize += samplesize
-        #
-        # for idx in clientSelect_idxs:
-        #     client = self.clients[idx]
-        #     weight.append(client.samplesize / totalsize)
-        #     w = client.model.state_dict()
-        #     w_locals.append(copy.deepcopy(w))
-        #
-        # w_avg = copy.deepcopy(w_locals[0])
-        # for k in w_avg.keys():
-        #     print(k)
-        #     w_avg[k] *= weight[0]
-        #     for i in range(1, len(w_locals)):
-        #         w_avg[k] += w_locals[i][k] * weight[i]
-        #     #w_avg[k] = torch.div(w_avg[k], len(w_locals))
 
         for k, idx in enumerate(clientSelect_idxs):
             client = self.clients[idx]
             weight = samplesize / totalsize
-            # print(client.client_id, client.sample_size, self.total_client_data_size, weight)
+
             for name, param in client.model.state_dict().items():
                 if k == 0:
                     self.aggregated_client_model[name] = param.data * weight

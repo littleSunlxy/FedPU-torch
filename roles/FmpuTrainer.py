@@ -1,17 +1,15 @@
 import numpy as np
-import torch.optim as optim
-from multiprocessing.dummy import Pool as ThreadPool
 import copy
 import matplotlib.pyplot as plt
 import torch
 
-from loss import MPULoss
-from dataSpilt import CustomImageDataset
+from datasets.dataSpilt import CustomImageDataset
 from datasets.loader import DataLoader
 from options import opt
-from modules.client import Client
-from modules.aggregator import Cloud
-from dataSpilt import get_data_loaders, get_default_data_transforms
+from roles.client import Client
+from roles.aggregator import Cloud
+from datasets.dataSpilt import get_data_loaders, get_default_data_transforms
+from modules.fedprox import GenerateLocalEpochs
 
 
 class FmpuTrainer:
@@ -88,42 +86,21 @@ class FmpuTrainer:
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
 
     def clients_train_step(self):
-        for idx in self.clientSelect_idxs:
-            self.clients[idx].train_pu()
+
+        if 'FedProx' in opt.method:
+            percentage = 0.0    # 0.5  0.9
+            mu = 0.0
+            print(f"System heterogeneity set to {percentage}% stragglers.\n")
+            print(f"Picking {len(self.clients)} random clients per round.\n")
+            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
+            heterogenous_epoch_list = np.array(heterogenous_epoch_list)
+            for idx in self.clientSelect_idxs:
+                self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu, globallmodel=self.cloud.aggregated_client_model)
+        else:
+            for idx in self.clientSelect_idxs:
+                self.clients[idx].train_pu()
+
 
     def clients_train_step_P(self):
         for idx in self.clientSelect_idxs:
             self.clients[idx].train_P()
-
-    def process(self, client):
-        client.train_pu()
-
-    def clients_validation_step(self): # 加载每一个model,在三个数据集上测试一下
-        for client in self.clients:
-            client.model
-
-
-
-def plotAcc(FmpuAcc, FLAcc):
-    epochs = list(range(len(FmpuAcc)))
-    plt.plot(epochs, FmpuAcc, color='r', label='Train with PUloss Accuracy')  # r表示红色
-    plt.plot(epochs, FLAcc, color='sandybrown', label='Train with Ploss Accuracy')  # r表示红色
-
-
-    #####非必须内容#########
-    plt.xlabel('communication rounds')  # x轴表示
-    plt.ylabel('Accuracy')  # y轴表示
-    plt.title("FLmpu Vs. FL_on_Positive")  # 图标标题表示
-    plt.legend()  # 每条折线的label显示
-
-    #plt.axhline(y=90.78, c='k', ls='--', lw=1)
-    #plt.annotate(s='90.78%', xy=(0, 90.78), xytext=(0, 91))
-
-    plt.ylim(0, 100)
-
-    #######################
-    plt.savefig(opt.imagename)  #T 保存图片，路径名为test.jpg
-    plt.show()  # 显示图片
-
-
-record_step = 1

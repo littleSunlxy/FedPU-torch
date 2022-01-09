@@ -1,9 +1,6 @@
-import os
-import torch
-import numpy as np
 from options import opt
-from model import CNNMnist, CNNCifar, ResNet34, ResNet9
-from FmpuTrainer import FmpuTrainer
+from modules.model import CNNMnist, ResNet9
+from roles.FmpuTrainer import FmpuTrainer
 
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "7"
