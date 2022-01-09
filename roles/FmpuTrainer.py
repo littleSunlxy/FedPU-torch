@@ -94,7 +94,7 @@ class FmpuTrainer:
             heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
             for idx in self.clientSelect_idxs:
-                self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu, globallmodel=self.cloud.aggregated_client_model)
+                self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu, globalmodel=self.cloud.aggregated_client_model)
         else:
             for idx in self.clientSelect_idxs:
                 self.clients[idx].train_pu()
