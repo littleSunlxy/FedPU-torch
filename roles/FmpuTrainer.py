@@ -86,7 +86,6 @@ class FmpuTrainer:
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
 
     def clients_train_step(self):
-
         if 'FedProx' in opt.method:
             percentage = 0.0    # 0.5  0.9
             mu = 0.0
