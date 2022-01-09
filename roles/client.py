@@ -142,14 +142,15 @@ class Client:
 
                 proximal_term = 0.0
                 # iterate through the current and global model parameters
+
                 if len(globalmodel.items()) == 0:
                     globalmodel = self.model
-                import pdb;
-                pdb.set_trace()
+
                 for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
                     # update the proximal term
                     # proximal_term += torch.sum(torch.abs((w-w_t)**2))
-
+                    import pdb;
+                    pdb.set_trace()
                     proximal_term += (w[1] - w_t[1]).norm(2)
 
                 loss = loss + (mu / 2) * proximal_term
