@@ -144,7 +144,9 @@ class Client:
                 # iterate through the current and global model parameters
                 import pdb;
                 pdb.set_trace()
-                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                if globalmodel.items == 0:
+                    globalmodel = self.model
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.items()):
                     # update the proximal term
                     # proximal_term += torch.sum(torch.abs((w-w_t)**2))
 
