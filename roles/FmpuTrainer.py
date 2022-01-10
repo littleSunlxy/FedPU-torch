@@ -41,7 +41,7 @@ class FmpuTrainer:
 
         self.clientSelect_idxs = []
         # print(len(self.clients))
-
+        self.cloud_lastmodel = None
         self.cloud = Cloud(self.clients, model_pu, opt.num_classes, test_dataloader)
         self.communication_rounds = opt.communication_rounds
         self.current_round = 0
