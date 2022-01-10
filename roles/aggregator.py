@@ -20,29 +20,35 @@ class Cloud:
         self.aggregated_client_model = model
 
     def aggregate(self, clientSelect_idxs):
-        # totalsize = 0
-        # samplesize = 500
-        # # for idx in clientSelect_idxs:
-        #     totalsize += samplesize
+        totalsize = 0
+        samplesize = 500
+        for idx in clientSelect_idxs:
+            totalsize += samplesize
 
-        # for k, idx in enumerate(clientSelect_idxs):
-        #     client = self.clients[idx]
-        #     weight = samplesize / totalsize
-        #     if self.aggregated_client_model == None:
-        #         self.aggregated_client_model = {}
-        #     for name, param in client.model.state_dict().items():
-        #         if k == 0:
-        #             import pdb; pdb.set_trace()
-        #             self.aggregated_client_model[name] = param.data * weight
-        #         else:
-        #             self.aggregated_client_model[name] += param.data * weight
+        global_model = {}
+        model_dict = self.aggregated_client_model.state_dict()
+        for k, idx in enumerate(clientSelect_idxs):
+            client = self.clients[idx]
+            weight = samplesize / totalsize
+            for name, param in client.model.state_dict().items():
+                if k == 0:
+                    global_model[name] = param.data * weight
+                else:
+                    global_model[name] += param.data * weight
+        import pdb;
+        pdb.set_trace()
+
+        pretrained_dict = {k: v for k, v in global_model.items() if k in self.aggregated_client_model.state_dict()}
+        # 2. overwrite entries in the existing state dict
+        model_dict.update(pretrained_dict)
+        self.aggregated_client_model.load_state_dict(pretrained_dict)
 
         # updating the global weights
         # import pdb;
         # pdb.set_trace()
         self.aggregated_client_model = self.model
         # import pdb; pdb.set_trace()
-        weights_avg = copy.deepcopy(self.clients[0].model)
+        weights_avg = copy.deepcopy(self.clients[clientSelect_idxs[0]].model)
         # print("res2.1.0.bias before:", weights_avg.state_dict()['res2.1.0.bias'].sum())
         for k in weights_avg.state_dict().keys():
             for index, i in enumerate(clientSelect_idxs):
@@ -51,8 +57,14 @@ class Cloud:
             import pdb;
             pdb.set_trace()
             weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
+            weights_avg.state_dict().update(k, torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs)))
             print("\n after div ---sum:", weights_avg.state_dict()[k].sum())
 
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+        # 2. overwrite entries in the existing state dict
+        model_dict.update(pretrained_dict)
+        # 3. load the new state dict
+        model.load_state_dict(pretrained_dict)
         # print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
 
         self.aggregated_client_model = weights_avg
