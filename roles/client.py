@@ -142,8 +142,7 @@ class Client:
 
                 proximal_term = 0.0
                 # iterate through the current and global model parameters
-                import pdb;
-                pdb.set_trace()
+
                 if globalmodel == None:
                     globalmodel = self.model
 
