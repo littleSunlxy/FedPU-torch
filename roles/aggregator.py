@@ -35,8 +35,6 @@ class Cloud:
                     global_model[name] = param.data * weight
                 else:
                     global_model[name] += param.data * weight
-        import pdb;
-        pdb.set_trace()
 
         pretrained_dict = {k: v for k, v in global_model.items() if k in model_dict}
         # 2. overwrite entries in the existing state dict
