@@ -32,6 +32,7 @@ class Cloud:
                 self.aggregated_client_model = {}
             for name, param in client.model.state_dict().items():
                 if k == 0:
+                    import pdb; pdb.set_trace()
                     self.aggregated_client_model[name] = param.data * weight
                 else:
                     self.aggregated_client_model[name] += param.data * weight
