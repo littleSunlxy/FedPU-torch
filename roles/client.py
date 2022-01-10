@@ -23,7 +23,7 @@ class Client:
             # self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
             self.loss = MPULoss_V2(opt.num_classes, opt.pu_weight).cuda()
 
-        self.ploss = PLoss(opt.num_classes)
+        self.ploss = PLoss(opt.num_classes).cuda()
         self.priorlist = priorlist
         self.indexlist = indexlist
         self.communicationRound = 0
@@ -141,7 +141,7 @@ class Client:
                 if opt.positiveIndex == 'randomIndexList':
                     loss = self.ploss(outputs, labels)
 
-                proximal_term = 0.0
+                proximal_term = torch.zeros(1).cuda()
                 # iterate through the current and global model parameters
 
                 if globalmodel == None:
