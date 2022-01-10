@@ -15,7 +15,6 @@ parser.add_argument('--label_dir', type=str, default='/mnt/beegfs/ssd_pool/docke
 # pu on clients
 parser.add_argument('--pu_weight', type=float, default=1)#1
 parser.add_argument('--local_epochs', type=int, default=2)
-parser.add_argument('--FedProx_Epochs', type=int, default=20)
 #parser.add_argument('--positiveIndex', type=str, default='k')  # 第k类为负类
 #parser.add_argument('--positiveIndex', type=str, default='0') #仅用ploss
 parser.add_argument('--positiveIndex', type=str, default='randomIndexList') #随机选两个标签为负类
@@ -41,6 +40,11 @@ parser.add_argument('--bsize_s', type=int, default=5)
 parser.add_argument('--test_batchsize', type=int, default=500)
 parser.add_argument('--task', type=str, default='lc-biid-c10')
 parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
+
+# FedProx parameters
+parser.add_argument('--FedProx_Epochs', type=int, default=20)
+parser.add_argument('--mu', type=float, default=0.0)
+parser.add_argument('--percentage', type=float, default=0.0)
 
 opt, _ = parser.parse_known_args()
 
