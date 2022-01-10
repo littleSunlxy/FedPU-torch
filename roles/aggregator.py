@@ -28,7 +28,8 @@ class Cloud:
         for k, idx in enumerate(clientSelect_idxs):
             client = self.clients[idx]
             weight = samplesize / totalsize
-
+            if self.aggregated_client_model == None:
+                self.aggregated_client_model = {}
             for name, param in client.model.state_dict().items():
                 if k == 0:
                     self.aggregated_client_model[name] = param.data * weight
