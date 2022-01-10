@@ -47,17 +47,17 @@ class Cloud:
                 weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
             weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
 
-        self.aggregated_client_model = weights_avg
+        self.c = weights_avg
         return self.aggregated_client_model
 
     def validation(self, cur_rounds):
-        self.model.eval()
+        self.aggregated_client_model.eval()
         correct = 0
         for i, (inputs, labels) in enumerate(self.test_loader):
             # print("Test input img scale:", inputs.max(), inputs.min())
             inputs = inputs.cuda()
             labels = labels.cuda()
-            outputs = self.model(inputs)
+            outputs = self.aggregated_client_model(inputs)
             pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
             correct += (pred == labels).sum().item()
         print('Round:{:d}, Accuracy: {:.4f} %'.format(cur_rounds, 100 * correct / len(self.test_loader.dataset)))

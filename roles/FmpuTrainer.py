@@ -78,7 +78,8 @@ class FmpuTrainer:
                 # client.model.load_state_dict(w_glob)
                 client.mode = copy.deepcopy(w_glob)
 
-            self.cloud.model.load_state_dict(w_glob)
+            # self.cloud.model.load_state_dict(w_glob)
+            # copy.deepcopy(w_glob)
             self.cloud.validation(self.current_round)
 
 
