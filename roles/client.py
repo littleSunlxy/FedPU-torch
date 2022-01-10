@@ -141,13 +141,13 @@ class Client:
                 if opt.positiveIndex == 'randomIndexList':
                     loss = self.ploss(outputs, labels)
 
-                proximal_term = torch.zeros(1).cuda()
-                # iterate through the current and global model parameters
-                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                    if (w[1] - w_t[1]).dtype == torch.float:
-                        proximal_term += (w[1] - w_t[1]).norm(2)
-                import pdb;
-                loss = loss + (mu / 2) * proximal_term
+                # proximal_term = torch.zeros(1).cuda()
+                # # iterate through the current and global model parameters
+                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                #     if (w[1] - w_t[1]).dtype == torch.float:
+                #         proximal_term += (w[1] - w_t[1]).norm(2)
+                # import pdb;
+                # loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 total_loss.append(loss)
@@ -182,13 +182,13 @@ class Client:
                 if globalmodel == None:
                     globalmodel = self.model
 
-                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                #     # update the proximal term
-                #     # proximal_term += torch.sum(torch.abs((w-w_t)**2))
-                #     if (w[1] - w_t[1]).dtype == torch.float:
-                #         proximal_term += (w[1] - w_t[1]).norm(2)
-                #
-                # loss = loss + (mu / 2) * proximal_term
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                    # update the proximal term
+                    # proximal_term += torch.sum(torch.abs((w-w_t)**2))
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
+
+                loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 if i == 0:
