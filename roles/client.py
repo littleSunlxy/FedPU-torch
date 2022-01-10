@@ -149,9 +149,10 @@ class Client:
                 for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
                     # update the proximal term
                     # proximal_term += torch.sum(torch.abs((w-w_t)**2))
-                    import pdb;
-                    pdb.set_trace()
-                    proximal_term += (w[1] - w_t[1]).norm(2)
+                    # import pdb;
+                    # pdb.set_trace()
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
 
                 loss = loss + (mu / 2) * proximal_term
 
