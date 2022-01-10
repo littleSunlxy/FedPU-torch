@@ -136,9 +136,9 @@ class Client:
                 # print(outputs.dtype, outputs.device)
 
                 if opt.positiveIndex == '0':
-                    loss = self.loss(outputs, labels)
+                    loss = self.ploss(outputs, labels)
                 if opt.positiveIndex == 'randomIndexList':
-                    loss = self.ploss(outputs, labels, self.priorlist, self.indexlist)
+                    loss = self.ploss(outputs, labels)
 
                 proximal_term = 0.0
                 # iterate through the current and global model parameters
