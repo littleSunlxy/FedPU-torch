@@ -20,10 +20,10 @@ class Cloud:
         self.aggregated_client_model = model
 
     def aggregate(self, clientSelect_idxs):
-        totalsize = 0
-        samplesize = 500
-        for idx in clientSelect_idxs:
-            totalsize += samplesize
+        # totalsize = 0
+        # samplesize = 500
+        # # for idx in clientSelect_idxs:
+        #     totalsize += samplesize
 
         # for k, idx in enumerate(clientSelect_idxs):
         #     client = self.clients[idx]
