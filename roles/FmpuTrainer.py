@@ -72,10 +72,10 @@ class FmpuTrainer:
                 self.clients_train_step()   # memery up
 
             # self.clients_validation_step()
-            w_glob = self.cloud.aggregate(self.clientSelect_idxs)
+            self.cloud_lastmodel = self.cloud.aggregate(self.clientSelect_idxs)
 
-            for client in self.clients:
-                client.model = copy.deepcopy(w_glob)
+            # for client in self.clients:
+            #     client.model = copy.deepcopy(w_glob)
 
             # self.cloud.model.load_state_dict(w_glob)
             # copy.deepcopy(w_glob)
@@ -96,6 +96,7 @@ class FmpuTrainer:
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
 
             for idx in self.clientSelect_idxs:
+                self.client[idx].model = copy.deepcopy(self.cloud_lastmodel)
                 if opt.usePU:
                     self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
@@ -104,9 +105,11 @@ class FmpuTrainer:
                                                        globalmodel=self.cloud.aggregated_client_model)
         else:
             for idx in self.clientSelect_idxs:
+                self.client[idx].model = copy.deepcopy(self.cloud_lastmodel)
                 self.clients[idx].train_pu()
 
 
     def clients_train_step_P(self):
         for idx in self.clientSelect_idxs:
+            self.client[idx].model = copy.deepcopy(self.cloud_lastmodel)
             self.clients[idx].train_P()
