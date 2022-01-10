@@ -45,12 +45,11 @@ parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
 parser.add_argument('--FedProx_Epochs', type=int, default=20)
 parser.add_argument('--mu', type=float, default=0.0)
 parser.add_argument('--percentage', type=float, default=0.0)
+parser.add_argument('--usePU', action='store_true', default=False,
+                    help='use PU training progress')
 
 opt, _ = parser.parse_known_args()
 
 
 FedAVG_model_path = '/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/cache/model/local_model'
 FedAVG_aggregated_model_path = '/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/cache/model/FedAVG_model.pth'
-
-# FedAVG_model_path = '/home/lxx-006/lxy/fmpu/cache/model/local_model'
-# FedAVG_aggregated_model_path = '/home/lxx-006/lxy/fmpu/cache/model/FedAVG_model.pth'

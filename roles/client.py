@@ -124,6 +124,45 @@ class Client:
         self.communicationRound+=1
         self.scheduler.step()
 
+    def train_fedprox_p(self, epochs=20, mu=0.0, globalmodel=None):
+        self.model.train()
+        for epoch in range(epochs):
+            for i, (inputs, labels) in enumerate(self.train_loader):
+                # print("training input img scale:", inputs.max(), inputs.min())
+                inputs = inputs.cuda()
+                labels = labels.cuda()
+                self.optimizer_pu.zero_grad()  # tidings清零
+                outputs = self.model(inputs)  # on cuda 0
+                # print(outputs.dtype, outputs.device)
+
+                if opt.positiveIndex == '0':
+                    loss = self.loss(outputs, labels)
+                if opt.positiveIndex == 'randomIndexList':
+                    loss = self.ploss(outputs, labels, self.priorlist, self.indexlist)
+
+                proximal_term = 0.0
+                # iterate through the current and global model parameters
+
+                if globalmodel == None:
+                    globalmodel = self.model
+
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                    # update the proximal term
+                    # proximal_term += torch.sum(torch.abs((w-w_t)**2))
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
+
+                loss = loss + (mu / 2) * proximal_term
+
+                loss.backward()
+                if i == 0:
+                    print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
+                self.optimizer_pu.step()
+
+        self.communicationRound += 1
+        self.scheduler.step()
+
+
     def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
         for epoch in range(epochs):
