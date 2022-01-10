@@ -38,7 +38,7 @@ class Cloud:
         import pdb;
         pdb.set_trace()
 
-        pretrained_dict = {k: v for k, v in global_model.items() if k in self.aggregated_client_model.state_dict()}
+        pretrained_dict = {k: v for k, v in global_model.items() if k in model_dict}
         # 2. overwrite entries in the existing state dict
         model_dict.update(pretrained_dict)
         self.aggregated_client_model.load_state_dict(pretrained_dict)
@@ -46,28 +46,28 @@ class Cloud:
         # updating the global weights
         # import pdb;
         # pdb.set_trace()
-        self.aggregated_client_model = self.model
-        # import pdb; pdb.set_trace()
-        weights_avg = copy.deepcopy(self.clients[clientSelect_idxs[0]].model)
-        # print("res2.1.0.bias before:", weights_avg.state_dict()['res2.1.0.bias'].sum())
-        for k in weights_avg.state_dict().keys():
-            for index, i in enumerate(clientSelect_idxs):
-                weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
-                print(weights_avg.state_dict()[k].sum())
-            import pdb;
-            pdb.set_trace()
-            weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
-            weights_avg.state_dict().update(k, torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs)))
-            print("\n after div ---sum:", weights_avg.state_dict()[k].sum())
-
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-        # 2. overwrite entries in the existing state dict
-        model_dict.update(pretrained_dict)
-        # 3. load the new state dict
-        model.load_state_dict(pretrained_dict)
-        # print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
-
-        self.aggregated_client_model = weights_avg
+        # self.aggregated_client_model = self.model
+        # # import pdb; pdb.set_trace()
+        # weights_avg = copy.deepcopy(self.clients[clientSelect_idxs[0]].model)
+        # # print("res2.1.0.bias before:", weights_avg.state_dict()['res2.1.0.bias'].sum())
+        # for k in weights_avg.state_dict().keys():
+        #     for index, i in enumerate(clientSelect_idxs):
+        #         weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
+        #         print(weights_avg.state_dict()[k].sum())
+        #     import pdb;
+        #     pdb.set_trace()
+        #     weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
+        #     weights_avg.state_dict().update(k, torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs)))
+        #     print("\n after div ---sum:", weights_avg.state_dict()[k].sum())
+        #
+        # pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+        # # 2. overwrite entries in the existing state dict
+        # model_dict.update(pretrained_dict)
+        # # 3. load the new state dict
+        # model.load_state_dict(pretrained_dict)
+        # # print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
+        #
+        # self.aggregated_client_model = weights_avg
         return self.aggregated_client_model
 
     def validation(self, cur_rounds):
