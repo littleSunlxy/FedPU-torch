@@ -40,16 +40,14 @@ class Cloud:
         # updating the global weights
         import pdb;
         pdb.set_trace()
-        self.aggregated_client_model = self.model.state_dict()
-        weights_avg = copy.deepcopy(self.clients[0])
-        for k in weights_avg.keys():
+        self.aggregated_client_model = self.model
+        weights_avg = copy.deepcopy(self.clients[0].model)
+        for k in weights_avg.state_dict().keys():
             for index, i in enumerate(clientSelect_idxs):
-                weights_avg[k] += self.clients[i][k]
+                weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
+            weights_avg.state_dict()[k] = torch.div(weights_avg[k], len(clientSelect_idxs))
 
-            weights_avg[k] = torch.div(weights_avg[k], len(clientSelect_idxs))
-
-        global_weights = weights_avg
-        self.aggregated_client_model.load_state_dict(global_weights)
+        self.aggregated_client_model = weights_avg
         return self.aggregated_client_model
 
     def validation(self, cur_rounds):
