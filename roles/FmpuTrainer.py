@@ -87,14 +87,19 @@ class FmpuTrainer:
 
     def clients_train_step(self):
         if 'FedProx' in opt.method:
-            percentage = 0.0    # 0.5  0.9
-            mu = 0.0
+            percentage = opt.percentage    # 0.5  0.9
+            mu = opt.mu
             print(f"System heterogeneity set to {percentage}% stragglers.\n")
             print(f"Picking {len(self.clients)} random clients per round.\n")
             heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
             for idx in self.clientSelect_idxs:
-                self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu, globalmodel=self.cloud.aggregated_client_model)
+                if opt.usePU:
+                    self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu,
+                                                       globalmodel=self.cloud.aggregated_client_model)
+                else:
+                    self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
+                                                       globalmodel=self.cloud.aggregated_client_model)
         else:
             for idx in self.clientSelect_idxs:
                 self.clients[idx].train_pu()
