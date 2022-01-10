@@ -158,7 +158,6 @@ class Client:
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_pu.step()
-        import pdb; pdb.set_trace()
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
