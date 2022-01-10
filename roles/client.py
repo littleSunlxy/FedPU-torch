@@ -132,7 +132,7 @@ class Client:
                 # print("training input img scale:", inputs.max(), inputs.min())
                 inputs = inputs.cuda()
                 labels = labels.cuda()
-                self.optimizer_pu.zero_grad()  # tidings清零
+                self.optimizer_p.zero_grad()  # tidings清零
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
@@ -151,11 +151,11 @@ class Client:
 
                 loss.backward()
                 total_loss.append(loss)
-                self.optimizer_pu.step()
+                self.optimizer_p.step()
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
-        self.scheduler.step()
+        self.scheduler_p.step()
 
 
     def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
