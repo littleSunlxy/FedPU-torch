@@ -41,17 +41,17 @@ class Cloud:
         # import pdb;
         # pdb.set_trace()
         self.aggregated_client_model = self.model
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         weights_avg = copy.deepcopy(self.clients[0].model)
-        print("res2.1.0.bias before:", weights_avg.state_dict()['res2.1.0.bias'].sum())
+        # print("res2.1.0.bias before:", weights_avg.state_dict()['res2.1.0.bias'].sum())
         for k in weights_avg.state_dict().keys():
             for index, i in enumerate(clientSelect_idxs):
                 weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
             weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
 
-        print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
-        import pdb;
-        pdb.set_trace()
+        # print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
+        # import pdb;
+        # pdb.set_trace()
         self.aggregated_client_model = weights_avg
         return self.aggregated_client_model
 
