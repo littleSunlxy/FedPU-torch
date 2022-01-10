@@ -158,7 +158,7 @@ class Client:
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_pu.step()
-        print('mean loss of {} epochs: {:.4f}'.format(epochs, sum(total_loss)))
+        print('mean loss of {} epochs: {:.4f}'.format(epochs, sum(total_loss)/len(total_loss)))
 
         self.communicationRound += 1
         self.scheduler.step()
