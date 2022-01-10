@@ -41,6 +41,7 @@ class Cloud:
         # import pdb;
         # pdb.set_trace()
         self.aggregated_client_model = self.model
+        import pdb; pdb.set_trace()
         weights_avg = copy.deepcopy(self.clients[0].model)
         for k in weights_avg.state_dict().keys():
             for index, i in enumerate(clientSelect_idxs):
