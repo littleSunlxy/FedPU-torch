@@ -23,7 +23,7 @@ parser.add_argument('--positiveRate', type=float, default=0.33)
 parser.add_argument('--randomIndex_num', type=int, default=2)
 
 # FL aggregator
-parser.add_argument('--num_clients', type=int, default=100)
+parser.add_argument('--num_clients', type=int, default=10)
 parser.add_argument('--communication_rounds', type=int, default=5000)
 parser.add_argument('--classes_per_client', type=int, default=5)
 #parser.add_argument('--participating_ratio', type=float, default=0.7)
@@ -41,7 +41,7 @@ parser.add_argument('--task', type=str, default='lc-biid-c10')
 parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
 
 # FedProx parameters
-parser.add_argument('--FedProx_Epochs', type=int, default=5)
+parser.add_argument('--FedProx_Epochs', type=int, default=10)
 parser.add_argument('--mu', type=float, default=0.0)
 parser.add_argument('--percentage', type=float, default=0.0)
 parser.add_argument('--usePU', action='store_true', default=False,
