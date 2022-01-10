@@ -126,6 +126,7 @@ class Client:
 
     def train_fedprox_p(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
+        total_loss = []
         for epoch in range(epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 # print("training input img scale:", inputs.max(), inputs.min())
@@ -155,9 +156,9 @@ class Client:
                 loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
-                if i == 0:
-                    print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
+                total_loss.append(loss)
                 self.optimizer_pu.step()
+        print('mean loss of {} epochs: {:.4f}'.format(epochs, sum(total_loss)))
 
         self.communicationRound += 1
         self.scheduler.step()
