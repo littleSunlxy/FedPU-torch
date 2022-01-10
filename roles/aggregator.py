@@ -48,11 +48,11 @@ class Cloud:
             for index, i in enumerate(clientSelect_idxs):
                 weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
                 print(weights_avg.state_dict()[k].sum())
-
+            import pdb;
+            pdb.set_trace()
             weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
             print("\n after div ---sum:", weights_avg.state_dict()[k].sum())
-        import pdb;
-        pdb.set_trace()
+
         # print("res2.1.0.bias after:", weights_avg.state_dict()['res2.1.0.bias'].sum())
 
         self.aggregated_client_model = weights_avg
