@@ -92,7 +92,7 @@ class FmpuTrainer:
             percentage = opt.percentage    # 0.5  0.9
             mu = opt.mu
             print(f"System heterogeneity set to {percentage}% stragglers.\n")
-            print(f"Picking {len(self.clients)} random clients per round.\n")
+            print(f"Picking {len(self.clientSelect_idxs)} random clients per round.\n")
             heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
 
