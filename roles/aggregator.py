@@ -45,7 +45,7 @@ class Cloud:
         for k in weights_avg.state_dict().keys():
             for index, i in enumerate(clientSelect_idxs):
                 weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
-            weights_avg.state_dict()[k] = torch.div(weights_avg[k], len(clientSelect_idxs))
+            weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
 
         self.aggregated_client_model = weights_avg
         return self.aggregated_client_model
