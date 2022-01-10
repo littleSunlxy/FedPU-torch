@@ -144,15 +144,9 @@ class Client:
                 proximal_term = torch.zeros(1).cuda()
                 # iterate through the current and global model parameters
                 import pdb; pdb.set_trace()
-                if globalmodel == None:
-                    globalmodel = self.model
-                    for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                        if (w[1] - w_t[1]).dtype == torch.float:
-                            proximal_term += (w[1] - w_t[1]).norm(2)
-                else:
-                    for w, w_t in zip(self.model.state_dict().items(), globalmodel.items()):
-                        if (w[1] - w_t[1]).dtype == torch.float:
-                            proximal_term += (w[1] - w_t[1]).norm(2)
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.items()):
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
 
                 loss = loss + (mu / 2) * proximal_term
 

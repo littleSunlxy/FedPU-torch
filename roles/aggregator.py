@@ -17,7 +17,7 @@ class Cloud:
         self.numclasses = numclasses
         self.test_loader = dataloader
         self.participating_clients = None
-        self.aggregated_client_model = None
+        self.aggregated_client_model = model
 
     def aggregate(self, clientSelect_idxs):
         totalsize = 0
