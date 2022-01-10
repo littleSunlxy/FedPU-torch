@@ -17,7 +17,7 @@ class Client:
         self.batches = opt.pu_batchsize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
-        if not opt.use_PULoss:
+        if not opt.usePU:
             self.loss = PLoss(opt.num_classes).cuda()
         else:
             # self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
@@ -111,10 +111,7 @@ class Client:
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
-                if not opt.use_PULoss:
-                    loss = self.loss(outputs, labels)
-                else:
-                    loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+                loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
                 if i == 0:
@@ -167,10 +164,7 @@ class Client:
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
-                if not opt.use_PULoss:
-                    loss = self.loss(outputs, labels)
-                else:
-                    loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
+                loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
                 proximal_term = 0.0
                 # iterate through the current and global model parameters
