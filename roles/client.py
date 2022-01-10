@@ -17,9 +17,9 @@ class Client:
         self.batches = opt.pu_batchsize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
-        if opt.positiveIndex == '0':
+        if not opt.use_PULoss:
             self.loss = PLoss(opt.num_classes).cuda()
-        if opt.positiveIndex == 'randomIndexList':
+        else:
             # self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
             self.loss = MPULoss_V2(opt.num_classes, opt.pu_weight).cuda()
 
@@ -111,9 +111,9 @@ class Client:
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
-                if opt.positiveIndex == '0':
+                if not opt.use_PULoss:
                     loss = self.loss(outputs, labels)
-                if opt.positiveIndex == 'randomIndexList':
+                else:
                     loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
@@ -136,18 +136,14 @@ class Client:
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
-                if opt.positiveIndex == '0':
-                    loss = self.ploss(outputs, labels)
-                if opt.positiveIndex == 'randomIndexList':
-                    loss = self.ploss(outputs, labels)
+                loss = self.ploss(outputs, labels)
 
-                # proximal_term = torch.zeros(1).cuda()
-                # # iterate through the current and global model parameters
-                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                #     if (w[1] - w_t[1]).dtype == torch.float:
-                #         proximal_term += (w[1] - w_t[1]).norm(2)
-                # import pdb;
-                # loss = loss + (mu / 2) * proximal_term
+                proximal_term = torch.zeros(1).cuda()
+                # iterate through the current and global model parameters
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
+                loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 total_loss.append(loss)
@@ -171,9 +167,9 @@ class Client:
                 outputs = self.model(inputs)  # on cuda 0
                 # print(outputs.dtype, outputs.device)
 
-                if opt.positiveIndex == '0':
+                if not opt.use_PULoss:
                     loss = self.loss(outputs, labels)
-                if opt.positiveIndex == 'randomIndexList':
+                else:
                     loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
 
                 proximal_term = 0.0

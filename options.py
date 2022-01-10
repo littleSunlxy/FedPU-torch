@@ -15,12 +15,11 @@ parser.add_argument('--label_dir', type=str, default='/mnt/beegfs/ssd_pool/docke
 # pu on clients
 parser.add_argument('--pu_weight', type=float, default=1)#1
 parser.add_argument('--local_epochs', type=int, default=2)
-#parser.add_argument('--positiveIndex', type=str, default='k')  # 第k类为负类
-#parser.add_argument('--positiveIndex', type=str, default='0') #仅用ploss
-parser.add_argument('--positiveIndex', type=str, default='randomIndexList') #随机选两个标签为负类
-parser.add_argument('--P_Index_accordance', action='store_true') #随机选两个标签为负类
+parser.add_argument('--use_PULoss', action='store_true', default=False,
+                                     help='use PULoss of PLoss')
+parser.add_argument('--P_Index_accordance', action='store_true')
 
-parser.add_argument('--positiveRate', type=float, default=0.33) #1
+parser.add_argument('--positiveRate', type=float, default=0.33)
 parser.add_argument('--randomIndex_num', type=int, default=2)
 
 # FL aggregator
