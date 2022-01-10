@@ -47,7 +47,7 @@ class Cloud:
                 weights_avg.state_dict()[k] += self.clients[i].model.state_dict()[k]
             weights_avg.state_dict()[k] = torch.div(weights_avg.state_dict()[k], len(clientSelect_idxs))
 
-        self.c = weights_avg
+        self.aggregated_client_model = weights_avg
         return self.aggregated_client_model
 
     def validation(self, cur_rounds):
