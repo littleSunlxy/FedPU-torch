@@ -71,7 +71,7 @@ class FmpuTrainer:
                 print("##### FedPU is training #####")
                 self.clients_train_step()   # memery up
 
-            self.clients_validation_step()
+            # self.clients_validation_step()
             w_glob = self.cloud.aggregate(self.clientSelect_idxs)
 
             for client in self.clients:
