@@ -38,8 +38,8 @@ class Cloud:
         #             self.aggregated_client_model[name] += param.data * weight
 
         # updating the global weights
-        import pdb;
-        pdb.set_trace()
+        # import pdb;
+        # pdb.set_trace()
         self.aggregated_client_model = self.model
         weights_avg = copy.deepcopy(self.clients[0].model)
         for k in weights_avg.state_dict().keys():
