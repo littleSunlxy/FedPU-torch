@@ -64,6 +64,7 @@ class FmpuTrainer:
             self.current_round = t + 1
             self.clients_select()
             # client train step
+            self.cloud_lastmodel = self.cloud.aggregate(self.clientSelect_idxs)
             if 'SL' in opt.method:
                 print("##### FedAvg SL is training #####")
                 self.clients_train_step_P()
@@ -72,8 +73,6 @@ class FmpuTrainer:
                 self.clients_train_step()   # memery up
 
             # self.clients_validation_step()
-            self.cloud_lastmodel = self.cloud.aggregate(self.clientSelect_idxs)
-
             # for client in self.clients:
             #     client.model = copy.deepcopy(w_glob)
 
