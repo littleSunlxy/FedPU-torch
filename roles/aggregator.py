@@ -25,18 +25,31 @@ class Cloud:
         for idx in clientSelect_idxs:
             totalsize += samplesize
 
-        for k, idx in enumerate(clientSelect_idxs):
-            client = self.clients[idx]
-            weight = samplesize / totalsize
-            if self.aggregated_client_model == None:
-                self.aggregated_client_model = {}
-            for name, param in client.model.state_dict().items():
-                if k == 0:
-                    import pdb; pdb.set_trace()
-                    self.aggregated_client_model[name] = param.data * weight
-                else:
-                    self.aggregated_client_model[name] += param.data * weight
+        # for k, idx in enumerate(clientSelect_idxs):
+        #     client = self.clients[idx]
+        #     weight = samplesize / totalsize
+        #     if self.aggregated_client_model == None:
+        #         self.aggregated_client_model = {}
+        #     for name, param in client.model.state_dict().items():
+        #         if k == 0:
+        #             import pdb; pdb.set_trace()
+        #             self.aggregated_client_model[name] = param.data * weight
+        #         else:
+        #             self.aggregated_client_model[name] += param.data * weight
 
+        # updating the global weights
+        import pdb;
+        pdb.set_trace()
+        self.aggregated_client_model = self.model.state_dict()
+        weights_avg = copy.deepcopy(self.clients[0])
+        for k in weights_avg.keys():
+            for index, i in enumerate(clientSelect_idxs):
+                weights_avg[k] += self.clients[i][k]
+
+            weights_avg[k] = torch.div(weights_avg[k], len(clientSelect_idxs))
+
+        global_weights = weights_avg
+        self.aggregated_client_model.load_state_dict(global_weights)
         return self.aggregated_client_model
 
     def validation(self, cur_rounds):
