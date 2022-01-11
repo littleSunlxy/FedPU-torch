@@ -259,7 +259,7 @@ def split_image_data(data, labels, n_clients=10, classes_per_client=10, shuffle=
 
 
 def get_data_loaders(verbose=True):
-    x_train, y_train, x_test, y_test, dataset_train = globals()['get_' + opt.dataset]()
+    x_train, y_train, x_test, y_test = globals()['get_' + opt.dataset]()
     # dataset_train, dataset_test = globals()['get_' + opt.dataset]()
 
     transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
