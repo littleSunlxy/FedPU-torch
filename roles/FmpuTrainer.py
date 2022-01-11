@@ -61,9 +61,9 @@ class FmpuTrainer:
 
         for t in range (self.communication_rounds):
             self.current_round = t + 1
+            self.cloud_lastmodel = self.cloud.aggregated_client_model
             self.clients_select()
             # client train step
-            self.cloud_lastmodel = self.cloud.aggregate(self.clientSelect_idxs)
 
             # self.clients_train_step()  # memery up
 
@@ -80,8 +80,8 @@ class FmpuTrainer:
 
             # self.cloud.model.load_state_dict(w_glob)
             # copy.deepcopy(w_glob)
-            self.cloud.validation(self.current_round)
 
+        self.cloud.aggregate(self.clientSelect_idxs)
 
     def clients_select(self):
         m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
