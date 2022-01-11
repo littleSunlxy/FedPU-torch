@@ -263,13 +263,15 @@ def get_data_loaders(verbose=True):
 
     transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
 
-    test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval), batch_size=opt.pu_batchsize, shuffle=True)
+    split = iid_partition(dataset_train, opt.num_clients)
+
+    # test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval), batch_size=opt.pu_batchsize, shuffle=True)
 
 
     # split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
     #                          classes_per_client=opt.classes_per_client,
     #                          verbose=verbose)
-    split = iid_partition(dataset_train, opt.num_clients)
+
 
     train_dataset = []
     priorlist = []
