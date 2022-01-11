@@ -199,6 +199,7 @@ class Client:
             for i, (inputs, labels) in enumerate(self.train_loader):
                 inputs = inputs.cuda()
                 labels = labels.cuda()
+                import pdb; pdb.set_trace()
                 self.optimizer_p.zero_grad()  # tidings清零
                 outputs = self.model(inputs)
                 loss = self.ploss(outputs, labels)
