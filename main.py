@@ -8,6 +8,8 @@ from roles.FmpuTrainer import FmpuTrainer
 
 
 def main():
+    from datasets.dataSpilt import get_MNIST
+    get_MNIST()
     if opt.dataset == 'MNIST':
         trainer = FmpuTrainer(CNNMnist().cuda())
     if opt.dataset == 'CIFAR10':
