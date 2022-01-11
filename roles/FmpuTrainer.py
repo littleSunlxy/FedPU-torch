@@ -80,8 +80,7 @@ class FmpuTrainer:
 
             # self.cloud.model.load_state_dict(w_glob)
             # copy.deepcopy(w_glob)
-
-        self.cloud.aggregate(self.clientSelect_idxs)
+            self.cloud.aggregate(self.clientSelect_idxs)
 
     def clients_select(self):
         m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
