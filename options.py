@@ -10,7 +10,8 @@ parser.add_argument('--dataset', type=str, default='MNIST')
 #parser.add_argument('--dataset', type=str, default='CIFAR10')
 parser.add_argument('--num_classes', type=int, default=10)
 #parser.add_argument('--label_dir', type=str, default='/workdir/linxinyang/experiment/data/cifar10/')
-parser.add_argument('--label_dir', type=str, default='/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/data/mnist/')
+parser.add_argument('--label_dir', type=str, default='cache/data/mnist/')
+# parser.add_argument('--label_dir', type=str, default='/mnt/beegfs/ssd_pool/docker/user/hadoop-automl/linxinyang/codebase/experiment/data/mnist/')
 
 # pu on clients
 parser.add_argument('--pu_weight', type=float, default=1)#1
