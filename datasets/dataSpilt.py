@@ -228,7 +228,7 @@ def split_image_data(data, labels, n_clients=10, classes_per_client=10, shuffle=
 
     if verbose:
         print_split(clients_split)
-
+    import pdb; pdb.set_trace()
     return clients_split
 
 
@@ -286,42 +286,17 @@ def get_data_loaders(verbose=True):
         for l in dataset.labels:
             samplesize[l] += 1
         # if opt.dataset == 'MNIST'
-        # if opt.P_Index_accordance:          # indexlist长度一致
-        #     for j in range(opt.randomIndex_num):
-        #         k = 0
-        #         while True:
-        #             index = (count + j + k) % opt.num_classes
-        #             if (i == (opt.num_clients - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
-        #                     and (sum(m==0 for m in selectcount)>(opt.num_classes-opt.classes_per_client) and index not in indexList):
-        #                 indexList.append(index)
-        #                 selectcount[index] += 1
-        #                 break
-        #             elif k > opt.num_classes:
-        #                 break
-        #             k += 1
-        # else:
-        #     for j in range(randomIndex_num[i]):
-        #         k = 0
-        #         while True:
-        #             index = (count + j + k) % opt.num_classes
-        #             if samplesize[index] > 40 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
-        #                 indexList.append(index)
-        #                 selectcount[index] += 1
-        #                 break
-        #             elif k > opt.num_classes:
-        #                 break
-        #             k += 1
-
-        if opt.P_Index_accordance:  # indexlist长度一致
+        if opt.P_Index_accordance:          # indexlist长度一致
             for j in range(opt.randomIndex_num):
                 k = 0
                 while True:
                     index = (count + j + k) % opt.num_classes
-                    if (i == (opt.num_clients - 1) or samplesize[index] > 40) and selectcount[
-                        index] < opt.randomIndex_num \
-                            and index not in indexList:
+                    if (i == (opt.num_clients - 1) or samplesize[index] > 40) and selectcount[index] < opt.randomIndex_num \
+                            and (sum(m==0 for m in selectcount)>(opt.num_classes-opt.classes_per_client) and index not in indexList):
                         indexList.append(index)
                         selectcount[index] += 1
+                        break
+                    elif k > opt.num_classes:
                         break
                     k += 1
         else:
@@ -329,12 +304,14 @@ def get_data_loaders(verbose=True):
                 k = 0
                 while True:
                     index = (count + j + k) % opt.num_classes
-                    if samplesize[index] > 40 and selectcount[index] < sum(
-                            randomIndex_num) / opt.num_classes and index not in indexList:
+                    if samplesize[index] > 40 and selectcount[index] < sum(randomIndex_num)/opt.num_classes and index not in indexList:
                         indexList.append(index)
                         selectcount[index] += 1
                         break
+                    elif k > opt.num_classes:
+                        break
                     k += 1
+
         label_dict, unlabel_dict, priorList = puSpilt_index(dataset, indexList, samplesize)
         priorlist.append(priorList)
         indexlist.append(indexList)
