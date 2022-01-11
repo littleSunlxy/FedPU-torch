@@ -54,8 +54,8 @@ def get_MNIST():
                                        transform = get_default_data_transforms(opt.dataset, verbose=False)[0])
     dataset_test = datasets.MNIST(root=opt.label_dir, train=False, download=True,
                                       transform = get_default_data_transforms(opt.dataset, verbose=False)[1])
-
-    return dataset_train.train_data.numpy(), dataset_train.train_labels.numpy(), dataset_test.test_data.numpy(), dataset_test.test_labels.numpy()
+    return dataset_train, dataset_test
+    # return dataset_train.train_data.numpy(), dataset_train.train_labels.numpy(), dataset_test.test_data.numpy(), dataset_test.test_labels.numpy()
 
 
 def get_CIFAR10():
@@ -228,7 +228,6 @@ def split_image_data(data, labels, n_clients=10, classes_per_client=10, shuffle=
 
     if verbose:
         print_split(clients_split)
-    import pdb; pdb.set_trace()
     return clients_split
 
 
@@ -253,22 +252,25 @@ def iid_partition(dataset, clients):
     for i in range(clients):
         client_dict[i] = set(np.random.choice(image_idxs, num_items_per_client, replace=False))
         image_idxs = list(set(image_idxs) - client_dict[i])
-
+    import pdb;
+    pdb.set_trace()
     return client_dict
 
 
 def get_data_loaders(verbose=True):
     x_train, y_train, x_test, y_test = globals()['get_' + opt.dataset]()
-
+    dataset_train, dataset_test = globals()['get_' + opt.dataset]()
 
     transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
 
     test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval), batch_size=opt.pu_batchsize, shuffle=True)
 
 
-    split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
-                             classes_per_client=opt.classes_per_client,
-                             verbose=verbose)
+    # split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
+    #                          classes_per_client=opt.classes_per_client,
+    #                          verbose=verbose)
+    split = iid_partition(dataset_train, opt.num_clients)
+
     train_dataset = []
     priorlist = []
     indexlist = []  #防止返回值出错
