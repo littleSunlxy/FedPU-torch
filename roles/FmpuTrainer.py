@@ -64,12 +64,15 @@ class FmpuTrainer:
             self.clients_select()
             # client train step
             self.cloud_lastmodel = self.cloud.aggregate(self.clientSelect_idxs)
-            if 'SL' in opt.method:
-                print("##### FedAvg SL is training #####")
-                self.clients_train_step_P()
-            else:
-                print("##### FedPU is training #####")
-                self.clients_train_step()   # memery up
+
+            self.clients_train_step()  # memery up
+
+            # if 'SL' in opt.method:
+            #     print("##### FedAvg SL is training #####")
+            #     self.clients_train_step_P()
+            # else:
+            #     print("##### FedPU is training #####")
+            #     self.clients_train_step()   # memery up
 
             # self.clients_validation_step()
             # for client in self.clients:
