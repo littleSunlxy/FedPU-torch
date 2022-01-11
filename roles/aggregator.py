@@ -31,6 +31,8 @@ class Cloud:
             client = self.clients[idx]
             weight = samplesize / totalsize
             for name, param in client.model.state_dict().items():
+                import pdb;
+                pdb.set_trace()
                 if k == 0:
                     global_model[name] = param.data * weight
                 else:
