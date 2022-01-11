@@ -2,7 +2,7 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--pu_lr', type=float, default=0.1)
+parser.add_argument('--pu_lr', type=float, default=0.01)
 parser.add_argument('--pu_weight_decay', type=float, default=5e-3)
 parser.add_argument('--pu_batchsize', type=int, default=500)
 parser.add_argument('--momentum', type=float, default=0.9)
