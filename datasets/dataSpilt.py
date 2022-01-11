@@ -261,7 +261,7 @@ def get_data_loaders(verbose=True):
         samplesize = [0 * 1 for i in range(opt.num_classes)]
         for l in dataset.labels:
             samplesize[l] += 1
-
+        # if opt.dataset == 'MNIST'
         if opt.P_Index_accordance:          # indexlist长度一致
             for j in range(opt.randomIndex_num):
                 k = 0
