@@ -54,8 +54,7 @@ def get_MNIST():
                                        transform = get_default_data_transforms(opt.dataset, verbose=False)[0])
     dataset_test = datasets.MNIST(root=opt.label_dir, train=False, download=True,
                                       transform = get_default_data_transforms(opt.dataset, verbose=False)[1])
-    return dataset_train, dataset_test
-    # return dataset_train.train_data.numpy(), dataset_train.train_labels.numpy(), dataset_test.test_data.numpy(), dataset_test.test_labels.numpy()
+    return dataset_train.train_data.numpy(), dataset_train.train_labels.numpy(), dataset_test.test_data.numpy(), dataset_test.test_labels.numpy(), dataset_train
 
 
 def get_CIFAR10():
@@ -230,47 +229,49 @@ def split_image_data(data, labels, n_clients=10, classes_per_client=10, shuffle=
         print_split(clients_split)
     return clients_split
 
-
-def iid_partition(dataset, clients):
-    """
-    I.I.D paritioning of data over clients
-    Shuffle the data
-    Split it between clients
-
-    params:
-      - dataset (torch.utils.Dataset): Dataset containing the MNIST Images
-      - clients (int): Number of Clients to split the data between
-
-    returns:
-      - Dictionary of image indexes for each client
-    """
-
-    num_items_per_client = int(len(dataset) / clients)
-    client_dict = {}
-    image_idxs = [i for i in range(len(dataset))]
-
-    for i in range(clients):
-        client_dict[i] = set(np.random.choice(image_idxs, num_items_per_client, replace=False))
-        image_idxs = list(set(image_idxs) - client_dict[i])
-    import pdb;
-    pdb.set_trace()
-    return client_dict
+#
+# def iid_partition(dataset, clients):
+#     """
+#     I.I.D paritioning of data over clients
+#     Shuffle the data
+#     Split it between clients
+#
+#     params:
+#       - dataset (torch.utils.Dataset): Dataset containing the MNIST Images
+#       - clients (int): Number of Clients to split the data between
+#
+#     returns:
+#       - Dictionary of image indexes for each client
+#     """
+#
+#     num_items_per_client = int(len(dataset) / clients)
+#     client_dict = {}
+#     image_idxs = [i for i in range(len(dataset))]
+#
+#     for i in range(clients):
+#         client_dict[i] = set(np.random.choice(image_idxs, num_items_per_client, replace=False))
+#         image_idxs = list(set(image_idxs) - client_dict[i])
+#         import pdb; pdb.set_trace()
+#         print("Data split:")
+#         print(" - Client {}: {}".format(i, client_dict[i]))
+#         print()
+#     return client_dict
 
 
 def get_data_loaders(verbose=True):
-    # x_train, y_train, x_test, y_test = globals()['get_' + opt.dataset]()
-    dataset_train, dataset_test = globals()['get_' + opt.dataset]()
+    x_train, y_train, x_test, y_test, dataset_train = globals()['get_' + opt.dataset]()
+    # dataset_train, dataset_test = globals()['get_' + opt.dataset]()
 
     transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
-
-    split = iid_partition(dataset_train, opt.num_clients)
-
-    # test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval), batch_size=opt.pu_batchsize, shuffle=True)
-
-
-    # split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
-    #                          classes_per_client=opt.classes_per_client,
-    #                          verbose=verbose)
+    test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval),
+                                              batch_size=opt.pu_batchsize, shuffle=True)
+    # if opt.is_noniid:
+    #     split = iid_partition(dataset_train, opt.num_clients)
+    #     # dict to list
+    # else:
+    split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
+                             classes_per_client=opt.classes_per_client,
+                             verbose=verbose)
 
 
     train_dataset = []
