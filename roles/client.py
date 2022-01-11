@@ -145,8 +145,8 @@ class Client:
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_p.step()
-                # if i == 0:
-                #     print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
+                if i == 0:
+                    print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
