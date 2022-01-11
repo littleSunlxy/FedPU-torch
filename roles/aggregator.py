@@ -38,8 +38,8 @@ class Cloud:
 
         pretrained_dict = {k: v for k, v in global_model.items() if k in model_dict}
         # 2. overwrite entries in the existing state dict
-        # import pdb;
-        # pdb.set_trace()
+        import pdb;
+        pdb.set_trace()
         model_dict.update(pretrained_dict)
         self.aggregated_client_model.load_state_dict(pretrained_dict)
 
