@@ -38,7 +38,7 @@ parser.add_argument('--imagename', type=str, default='5.23.6.jpg')
 #Fedmatch dataloader
 parser.add_argument('--useFedmatchDataLoader', action='store_true', default=False,
                     help='use FedmatchDataLoader')
-parser.add_argument('--bsize_s', type=int, default=5)
+parser.add_argument('--bsize_s', type=int, default=500)
 parser.add_argument('--test_batchsize', type=int, default=500)
 parser.add_argument('--task', type=str, default='lc-biid-c10')
 parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
