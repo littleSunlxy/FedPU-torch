@@ -11,9 +11,9 @@
 #04.log
 #python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 ##05.log
-python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.5 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
+#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.5 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 ##06.log
-#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.9 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
+python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.9 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 
 
 #07.log
