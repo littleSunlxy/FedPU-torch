@@ -194,7 +194,7 @@ class Client:
 
     def train_P(self):
         self.model.train()
-        total_loss = []
+        # total_loss = []
         for epoch in range(opt.local_epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 inputs = inputs.cuda()
@@ -205,10 +205,9 @@ class Client:
                 loss = self.ploss(outputs, labels)
                 loss.backward()
                 self.optimizer_p.step()
-                total_loss.append(loss)
-                if i == 0:
-                    print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
-        print('mean loss of {} epochs: {:.4f}'.format(opt.local_epochs, (sum(total_loss) / len(total_loss)).item()))
+                # total_loss.append(loss)
+            print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
+        # print('mean loss of {} epochs: {:.4f}'.format(opt.local_epochs, (sum(total_loss) / len(total_loss)).item()))
 
         self.communicationRound += 1
         self.scheduler_p.step()
