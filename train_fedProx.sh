@@ -9,7 +9,7 @@
 #python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --mu 0.01 --percentage 90 --num_clients 100 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.33 --randomIndex_num 2 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.1
 
 #04.log
-python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --pu_weight 0.3 --mu 0.01 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
+python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --pu_weight 1.2 --mu 0.01 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 ##05.log
 #python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.5 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 ##06.log
