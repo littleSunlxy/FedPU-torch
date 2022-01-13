@@ -2,7 +2,7 @@
 
 # exp in original paper
 #01.log
-python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --method 'FedProx_SL' --mu 0.00---percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.1
+python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --method 'FedProx_SL' --mu 0.00 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.1
 #02.log
 #python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --mu 0.0 --percentage 50 --num_clients 100 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.33 --randomIndex_num 2 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.05
 ##03.log
