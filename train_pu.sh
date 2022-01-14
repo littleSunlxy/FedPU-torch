@@ -4,7 +4,7 @@
 #python main.py   --dataset 'CIFAR10'  --useFedmatchDataLoader  --task 'lc-biid-c10' --method 'FedAVG-SL' --num_clients 100 --local_epochs 1 --communication_rounds 400 --pu_lr 0.01 --clientSelect_Rate 0.05
 #
 ## iid  FedPU
-python main.py   --dataset 'CIFAR10'  --useFedmatchDataLoader  --task 'lc-bimb-c10' --method 'FedPU_SL' --num_clients 100 --local_epochs 10 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
+python main.py   --dataset 'CIFAR10'  --useFedmatchDataLoader  --task 'lc-bimb-c10' --method 'FedPU_SL' --num_clients 100 --local_epochs 2 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.1
 
 # non-iid FedAVG-SL
 #python main.py   --dataset 'CIFAR10'  --useFedmatchDataLoader  --task 'lc-bimb-c10' --method 'FedAVG-SL' --num_clients 100 --local_epochs 5 --communication_rounds 400 --pu_lr 0.01 --clientSelect_Rate 0.05
