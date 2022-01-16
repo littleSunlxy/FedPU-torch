@@ -100,7 +100,7 @@ class Client:
         self.x_valid = self.loader.scale(self.x_valid)
 
 
-    def train_pu(self):
+    def train_fedpu_pu(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):
@@ -136,18 +136,16 @@ class Client:
 
                 loss = self.ploss(outputs, labels)
 
-                # proximal_term = torch.zeros(1).cuda()
-                # # iterate through the current and global model parameters
-                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                #     if (w[1] - w_t[1]).dtype == torch.float:
-                #         proximal_term += (w[1] - w_t[1]).norm(2)
-                # loss = loss + (mu / 2) * proximal_term
+                proximal_term = torch.zeros(1).cuda()
+                # iterate through the current and global model parameters
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
+                loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_p.step()
-                # if i == 0:
-                #     print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
@@ -191,7 +189,7 @@ class Client:
 
 
 
-    def train_P(self):
+    def train_fedpu_fedavg(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):
