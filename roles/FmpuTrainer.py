@@ -63,10 +63,6 @@ class FmpuTrainer:
             self.current_round = t + 1
             self.cloud_lastmodel = self.cloud.aggregated_client_model
             self.clients_select()
-<<<<<<< HEAD
-            # client train step
-=======
->>>>>>> 1e259b3650a78933c655955434dd2f9bb7337f9d
 
             if 'SL' in opt.method:
                 print("##### FedAvg SL is training #####")
