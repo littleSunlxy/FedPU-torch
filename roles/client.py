@@ -100,7 +100,7 @@ class Client:
         self.x_valid = self.loader.scale(self.x_valid)
 
 
-    def train_pu(self):
+    def train_fedpu_pu(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):
@@ -146,8 +146,6 @@ class Client:
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_p.step()
-                # if i == 0:
-                #     print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
@@ -191,7 +189,7 @@ class Client:
 
 
 
-    def train_P(self):
+    def train_fedpu_fedavg(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):

@@ -63,14 +63,17 @@ class FmpuTrainer:
             self.current_round = t + 1
             self.cloud_lastmodel = self.cloud.aggregated_client_model
             self.clients_select()
+<<<<<<< HEAD
             # client train step
+=======
+>>>>>>> 1e259b3650a78933c655955434dd2f9bb7337f9d
 
             if 'SL' in opt.method:
                 print("##### FedAvg SL is training #####")
-                self.clients_train_step_P()
+                self.clients_train_step_SL()
             else:
                 print("##### FedPU is training #####")
-                self.clients_train_step()   # memery up
+                self.clients_train_step_SS()   # memery up
 
             # self.clients_validation_step()
             # for client in self.clients:
@@ -85,7 +88,7 @@ class FmpuTrainer:
         m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
 
-    def clients_train_step(self):
+    def clients_train_step_SS(self):
         if 'FedProx' in opt.method:
             percentage = opt.percentage    # 0.5  0.9
             mu = opt.mu
@@ -102,13 +105,29 @@ class FmpuTrainer:
                 else:
                     self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
-        else:
+        elif 'FedPU' in opt.method:
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
-                self.clients[idx].train_pu()
+                self.clients[idx].train_fedpu_pu()
+        else:
+            return
 
 
-    def clients_train_step_P(self):
-        for idx in self.clientSelect_idxs:
-            self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
-            self.clients[idx].train_P()
+    def clients_train_step_SL(self):
+        if 'FedProx' in opt.method:
+            percentage = opt.percentage    # 0.5  0.9
+            mu = opt.mu
+            print(f"System heterogeneity set to {percentage}% stragglers.\n")
+            print(f"Picking {len(self.clientSelect_idxs)} random clients per round.\n")
+            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
+            heterogenous_epoch_list = np.array(heterogenous_epoch_list)
+            for idx in self.clientSelect_idxs:
+                self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
+                self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
+                                                  globalmodel=self.cloud.aggregated_client_model)
+        elif 'FedPU' in opt.method:
+            for idx in self.clientSelect_idxs:
+                self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
+                self.clients[idx].train_fedpu_fedavg()
+        else:
+            return
