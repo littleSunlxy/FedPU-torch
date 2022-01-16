@@ -44,26 +44,6 @@ class MPULoss(nn.Module):
 
 
 
-class PLoss(nn.Module):
-    def __init__(self, k):
-        super().__init__()
-        self.numClass = torch.tensor(k).cuda()
-
-    def forward(self, outputs, labels):
-        outputs = outputs.cuda().float()
-
-        # 数据划分
-        P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1)
-        labelsP = torch.index_select(labels, 0, P_mask).cuda()
-        outputsP = torch.index_select(outputs, 0, P_mask).cuda()
-
-        crossentropyloss=nn.CrossEntropyLoss().cuda()
-
-        crossloss = crossentropyloss(outputsP, labelsP)
-        return crossloss
-
-
-
 class MPULoss_INDEX(nn.Module):
     def __init__(self, k, puW):
         super().__init__()
@@ -114,6 +94,28 @@ class MPULoss_INDEX(nn.Module):
         return objective, PULoss * self.puW, crossloss
 
 
+
+
+class PLoss(nn.Module):
+    def __init__(self, k):
+        super().__init__()
+        self.numClass = torch.tensor(k).cuda()
+
+    def forward(self, outputs, labels):
+        outputs = outputs.cuda().float()
+
+        # 数据划分
+        P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1)
+        labelsP = torch.index_select(labels, 0, P_mask).cuda()
+        outputsP = torch.index_select(outputs, 0, P_mask).cuda()
+
+        crossentropyloss=nn.CrossEntropyLoss().cuda()
+
+        crossloss = crossentropyloss(outputsP, labelsP)
+        return crossloss
+
+
+
 class MPULoss_V2(nn.Module):
     def __init__(self, k, puW):
         super().__init__()
@@ -159,7 +161,7 @@ class MPULoss_V2(nn.Module):
         crossloss = crossentropyloss(outputsP, labelsP)
 
         # objective = PULoss * self.puW
-        # objective = crossloss
-        objective = PULoss * self.puW + crossloss
+        objective = crossloss
+        # objective = PULoss * self.puW + crossloss
 
         return objective, PULoss * self.puW, crossloss

@@ -65,8 +65,6 @@ class FmpuTrainer:
             self.clients_select()
             # client train step
 
-            # self.clients_train_step()  # memery up
-
             if 'SL' in opt.method:
                 print("##### FedAvg SL is training #####")
                 self.clients_train_step_P()

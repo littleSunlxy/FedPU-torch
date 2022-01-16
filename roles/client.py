@@ -136,12 +136,12 @@ class Client:
 
                 loss = self.ploss(outputs, labels)
 
-                # proximal_term = torch.zeros(1).cuda()
-                # # iterate through the current and global model parameters
-                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                #     if (w[1] - w_t[1]).dtype == torch.float:
-                #         proximal_term += (w[1] - w_t[1]).norm(2)
-                # loss = loss + (mu / 2) * proximal_term
+                proximal_term = torch.zeros(1).cuda()
+                # iterate through the current and global model parameters
+                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                    if (w[1] - w_t[1]).dtype == torch.float:
+                        proximal_term += (w[1] - w_t[1]).norm(2)
+                loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 total_loss.append(loss)
@@ -184,7 +184,7 @@ class Client:
                 total_loss.append(loss)
                 loss.backward()
                 self.optimizer_pu.step()
-            print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
+        print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
         self.communicationRound += 1
         self.scheduler.step()
 
