@@ -8,6 +8,7 @@ from roles.FmpuTrainer import FmpuTrainer
 
 
 def main():
+    print("Acc from:", opt, "\n")
     if opt.dataset == 'MNIST':
         trainer = FmpuTrainer(CNNMnist().cuda())
     if opt.dataset == 'CIFAR10':

@@ -1,25 +1,18 @@
 # train FedProx
 
-# exp in original paper
-#01.log
-#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --FedProx_Epochs 2 --mu 0.10 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.1
+# train FedPU FedMatch-iid
+python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --local_epochs 20 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
-#02.log
-#python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --mu 0.0 --percentage 50 --num_clients 100 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.33 --randomIndex_num 2 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.05
-##03.log
-#python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --mu 0.01 --percentage 90 --num_clients 100 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.33 --randomIndex_num 2 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.1
+# train FedProx FedMatch-iid
+#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --local_epochs 20 --mu 0.10 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
-#04.log
-#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --pu_weight 1.8 --mu 0.01 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
-##05.log
-#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.5 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
-##06.log
-#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.9 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
 
-#07.log
-#python main.py  --useFedmatchDataLoader --dataset 'CIFAR10'  --task 'lc-bimb-c10' --method 'FedProx' --FedProx_Epochs 1 --usePU --mu 0.01 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.1
-#08.log
-#python main.py  --useFedmatchDataLoader --dataset 'CIFAR10' --method 'FedProx' --usePU --mu 0.01 --percentage 0.5 --num_clients 100 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.33 --randomIndex_num 2 --communication_rounds 200 --pu_lr 0.01 --clientSelect_Rate 0.1
+# train FedPU FedMatch-noniid
+#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --local_epochs 20 --mu 0.10 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
-# use_my_setting
-python main.py   --dataset 'CIFAR10' --method 'FedPU' --usePU --num_clients 10 --pu_batchsize 256 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --FedProx_Epochs 20 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.2
+# train FedProx FedMatch-noniid
+#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --local_epochs 20 --mu 0.10 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
+
+
+# use my data spilt setting
+#python main.py   --dataset 'CIFAR10' --method 'FedPU' --usePU --num_clients 10 --pu_batchsize 256 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --FedProx_Epochs 20 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.2
