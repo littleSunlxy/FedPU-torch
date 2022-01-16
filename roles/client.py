@@ -102,6 +102,7 @@ class Client:
 
     def train_pu(self):
         self.model.train()
+        total_loss = []
         for epoch in range(opt.local_epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 # print("training input img scale:", inputs.max(), inputs.min())
@@ -114,9 +115,9 @@ class Client:
                 loss, puloss, celoss = self.loss(outputs, labels, self.priorlist, self.indexlist)
                 # print("lr:", self.optimizer_pu.param_groups[-1]['lr'])
                 loss.backward()
-                if i == 0:
-                    print('epoch:{} loss: {:.4f}, puloss: {:.4f}, celoss: {:.4f}'.format(epoch, loss.item(), puloss.item(), celoss.item()))
+                total_loss.append(loss)
                 self.optimizer_pu.step()
+        print('mean loss of {} epochs: {:.4f}'.format(opt.local_epochs, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound+=1
         self.scheduler.step()
@@ -135,12 +136,12 @@ class Client:
 
                 loss = self.ploss(outputs, labels)
 
-                proximal_term = torch.zeros(1).cuda()
-                # iterate through the current and global model parameters
-                for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
-                    if (w[1] - w_t[1]).dtype == torch.float:
-                        proximal_term += (w[1] - w_t[1]).norm(2)
-                loss = loss + (mu / 2) * proximal_term
+                # proximal_term = torch.zeros(1).cuda()
+                # # iterate through the current and global model parameters
+                # for w, w_t in zip(self.model.state_dict().items(), globalmodel.state_dict().items()):
+                #     if (w[1] - w_t[1]).dtype == torch.float:
+                #         proximal_term += (w[1] - w_t[1]).norm(2)
+                # loss = loss + (mu / 2) * proximal_term
 
                 loss.backward()
                 total_loss.append(loss)
@@ -155,6 +156,7 @@ class Client:
 
     def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
+        total_loss = []
         for epoch in range(epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 # print("training input img scale:", inputs.max(), inputs.min())
@@ -179,13 +181,10 @@ class Client:
                         proximal_term += (w[1] - w_t[1]).norm(2)
 
                 loss = loss + (mu / 2) * proximal_term
-
+                total_loss.append(loss)
                 loss.backward()
-                if i == 0:
-                    print('epoch:{} loss: {:.4f}, puloss: {:.4f}, celoss: {:.4f}'.format(epoch, loss.item(),
-                                                                                         puloss.item(), celoss.item()))
                 self.optimizer_pu.step()
-
+            print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
         self.communicationRound += 1
         self.scheduler.step()
 
@@ -194,7 +193,7 @@ class Client:
 
     def train_P(self):
         self.model.train()
-        # total_loss = []
+        total_loss = []
         for epoch in range(opt.local_epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 inputs = inputs.cuda()
@@ -205,9 +204,8 @@ class Client:
                 loss = self.ploss(outputs, labels)
                 loss.backward()
                 self.optimizer_p.step()
-                # total_loss.append(loss)
-            print('epoch:{} loss: {:.4f}'.format(epoch, loss.item()))
-        # print('mean loss of {} epochs: {:.4f}'.format(opt.local_epochs, (sum(total_loss) / len(total_loss)).item()))
+                total_loss.append(loss)
+        print('mean loss of {} epochs: {:.4f}'.format(opt.local_epochs, (sum(total_loss) / len(total_loss)).item()))
 
         self.communicationRound += 1
         self.scheduler_p.step()
