@@ -90,7 +90,7 @@ class FmpuTrainer:
             mu = opt.mu
             print(f"System heterogeneity set to {percentage}% stragglers.\n")
             print(f"Picking {len(self.clientSelect_idxs)} random clients per round.\n")
-            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
+            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.local_epochs)
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
 
             for idx in self.clientSelect_idxs:
@@ -115,7 +115,7 @@ class FmpuTrainer:
             mu = opt.mu
             print(f"System heterogeneity set to {percentage}% stragglers.\n")
             print(f"Picking {len(self.clientSelect_idxs)} random clients per round.\n")
-            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.FedProx_Epochs)
+            heterogenous_epoch_list = GenerateLocalEpochs(percentage, size=len(self.clients), max_epochs=opt.local_epochs)
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())

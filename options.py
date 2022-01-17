@@ -15,7 +15,7 @@ parser.add_argument('--label_dir', type=str, default='/mnt/beegfs/ssd_pool/docke
 
 # pu on clients
 parser.add_argument('--pu_weight', type=float, default=1)#1
-parser.add_argument('--local_epochs', type=int, default=2)
+parser.add_argument('--local_epochs', type=int, default=20)
 parser.add_argument('--use_PULoss', action='store_true', default=False,
                                      help='use PULoss of PLoss')
 parser.add_argument('--is_noniid', action='store_true', default=False,
@@ -44,7 +44,6 @@ parser.add_argument('--task', type=str, default='lc-biid-c10')
 parser.add_argument('--method', type=str, default='FedPU') # / FedAVG-SL
 
 # FedProx parameters
-parser.add_argument('--FedProx_Epochs', type=int, default=20)
 parser.add_argument('--mu', type=float, default=0.0)
 parser.add_argument('--percentage', type=float, default=0.0)
 parser.add_argument('--usePU', action='store_true', default=False,
