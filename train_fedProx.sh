@@ -11,9 +11,9 @@
 #python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --local_epochs 20 --mu 0.10 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
 # train FedProx FedMatch-noniid
-python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --usePU --local_epochs 20 --mu 0.10 --pu_weight 1.0 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
+#python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --task 'lc-bimb-c10' --method 'FedProx' --usePU --local_epochs 20 --mu 0.10 --pu_weight 1.0 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
 
 # use my data spilt setting
-#python main.py   --dataset 'CIFAR10' --method 'FedPU' --usePU --local_epochs 20 --num_clients 10 --pu_batchsize 256 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.2
+python main.py   --dataset 'CIFAR10' --method 'FedProx' --usePU --local_epochs 20 --pu_weight 0.0 --mu 0.00 --num_clients 10 --pu_batchsize 512 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.5
 
