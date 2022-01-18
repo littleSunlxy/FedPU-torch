@@ -4,7 +4,7 @@
 #python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedPU' --usePU --local_epochs 10 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
 # train FedProx FedMatch-iid
-python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx_SL' --local_epochs 20 --pu_weight 1 --mu 0.1 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
+python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --method 'FedProx_SL' --local_epochs 20 --pu_weight 1 --mu 0.0 --percentage 0.0 --num_clients 100 --pu_batchsize 512 --communication_rounds 500 --pu_lr 0.01 --clientSelect_Rate 0.05
 
 
 # train FedPU FedMatch-noniid
