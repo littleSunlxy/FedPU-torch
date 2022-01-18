@@ -16,3 +16,4 @@ python main.py  --useFedmatchDataLoader  --dataset 'CIFAR10' --task 'lc-bimb-c10
 
 # use my data spilt setting
 #python main.py   --dataset 'CIFAR10' --method 'FedPU' --usePU --local_epochs 20 --num_clients 10 --pu_batchsize 256 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --communication_rounds 2000 --pu_lr 0.01 --clientSelect_Rate 0.2
+
