@@ -10,6 +10,12 @@ from datasets.loader import DataLoader
 from datasets.dataSpilt import CustomImageDataset, get_default_data_transforms
 
 
+def adjust_learning_rate(optimizer, communication_round):
+    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    lr = opt.pu_lr * (0.992 ** (communication_round // 1))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
 class Client:
     def __init__(self, client_id, model_pu, trainloader=None, testloader=None, priorlist=None, indexlist=None):
         self.client_id = client_id
@@ -48,22 +54,18 @@ class Client:
         num_steps = round(len(self.x_labeled)/bsize_s)
         bsize_u = math.ceil(len(self.x_unlabeled)/max(num_steps,1))  # 101
 
+        self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
         if 'SL' in opt.method:
-            self.load_original_model()
             # make all the data full labeled
-            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
             self.y_unlabeled = torch.argmax(torch.from_numpy(self.y_unlabeled), -1).numpy()
-            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
-            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
-
         else:
             # sign the unlabeled data
-            self.y_labeled = torch.argmax(torch.from_numpy(self.y_labeled), -1).numpy()
             self.y_unlabeled = (torch.argmax(torch.from_numpy(self.y_unlabeled), -1) + opt.num_classes).numpy()
+        
+        # merge the S and U dataset
+        train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
+        train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
 
-            # merge the S and U datasets
-            train_x = np.concatenate((self.x_unlabeled, self.x_labeled),axis = 0).transpose(0,3,1,2)
-            train_y = np.concatenate((self.y_unlabeled, self.y_labeled),axis = 0)
 
         batchsize = bsize_s + bsize_u
         transforms_train, _ = get_default_data_transforms(opt.dataset, verbose=False)
@@ -155,6 +157,7 @@ class Client:
     def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
         total_loss = []
+        adjust_learning_rate(self.optimizer_pu, self.communicationRound)
         for epoch in range(epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 # print("training input img scale:", inputs.max(), inputs.min())
@@ -182,6 +185,7 @@ class Client:
                 total_loss.append(loss)
                 loss.backward()
                 self.optimizer_pu.step()
+            print("epoch", epoch, "lr:", self.optimizer_pu.state_dict()['param_groups'][0]['lr'])
         print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
         self.communicationRound += 1
         self.scheduler.step()

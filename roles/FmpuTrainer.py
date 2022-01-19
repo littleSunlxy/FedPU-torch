@@ -71,18 +71,14 @@ class FmpuTrainer:
                 print("##### FedPU is training #####")
                 self.clients_train_step_SS()   # memery up
 
-            # self.clients_validation_step()
-            # for client in self.clients:
-            #     client.model = copy.deepcopy(w_glob)
-
-            # self.cloud.model.load_state_dict(w_glob)
-            # copy.deepcopy(w_glob)
             self.cloud.aggregate(self.clientSelect_idxs)
             self.cloud.validation(t)
+
 
     def clients_select(self):
         m = max(int(opt.clientSelect_Rate * opt.num_clients), 1)
         self.clientSelect_idxs = np.random.choice(range(opt.num_clients), m, replace=False)
+
 
     def clients_train_step_SS(self):
         if 'FedProx' in opt.method:
