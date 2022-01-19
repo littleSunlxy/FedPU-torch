@@ -12,7 +12,7 @@ from datasets.dataSpilt import CustomImageDataset, get_default_data_transforms
 
 def adjust_learning_rate(optimizer, communication_round):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = opt.pu_lr * (0.992 ** (communication_round // 1))
+    lr = opt.pu_lr * (0.992 ** (communication_round * opt.local_epochs // 20))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
@@ -157,7 +157,8 @@ class Client:
     def train_fedprox_pu(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
         total_loss = []
-        adjust_learning_rate(self.optimizer_pu, self.communicationRound)
+        if opt.adjust_lr:
+            adjust_learning_rate(self.optimizer_pu, self.communicationRound)
         for epoch in range(epochs):
             for i, (inputs, labels) in enumerate(self.train_loader):
                 # print("training input img scale:", inputs.max(), inputs.min())
