@@ -15,5 +15,5 @@
 
 
 # use my data spilt setting
-python main.py   --dataset 'CIFAR10' --method 'FedProx' --usePU --adjust_lr --local_epochs 5 --communication_rounds 2000 --pu_weight 1 --mu 0.10 --num_clients 100 --pu_batchsize 1024 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --pu_lr 0.01 --clientSelect_Rate 0.1
+python main.py   --dataset 'CIFAR10' --method 'FedProx' --usePU --adjust_lr --local_epochs 2 --communication_rounds 1000 --pu_weight 1 --mu 0.10 --num_clients 100 --pu_batchsize 1024 --classes_per_client 2 --P_Index_accordance --positiveRate 0.1 --randomIndex_num 2 --pu_lr 0.01 --clientSelect_Rate 0.1
 
