@@ -292,8 +292,6 @@ def get_data_loaders(verbose=True):
             samplesize[l] += 1
         # if opt.dataset == 'MNIST'
         if opt.P_Index_accordance:          # indexlist长度一致
-            import pdb;
-            pdb.set_trace()
             for j in range(opt.randomIndex_num):
                 k = 0
                 while True:
@@ -318,7 +316,6 @@ def get_data_loaders(verbose=True):
                     elif k > opt.num_classes:
                         break
                     k += 1
-        pdb.set_trace()
         label_dict, unlabel_dict, priorList = puSpilt_index(dataset, indexList, samplesize)
         priorlist.append(priorList)
         indexlist.append(indexList)
