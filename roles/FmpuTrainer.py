@@ -95,6 +95,7 @@ class FmpuTrainer:
                     self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
                 else:
+                    import pdb; pdb.set_trace()
                     self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
         elif 'FedPU' in opt.method:
