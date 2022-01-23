@@ -95,7 +95,6 @@ class FmpuTrainer:
                     self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
                 else:
-                    import pdb; pdb.set_trace()
                     self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
         elif 'FedPU' in opt.method:
@@ -116,6 +115,8 @@ class FmpuTrainer:
             heterogenous_epoch_list = np.array(heterogenous_epoch_list)
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
+                import pdb;
+                pdb.set_trace()
                 self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                   globalmodel=self.cloud.aggregated_client_model)
         elif 'FedPU' in opt.method:
