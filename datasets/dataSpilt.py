@@ -320,7 +320,8 @@ def get_data_loaders(verbose=True):
         priorlist.append(priorList)
         indexlist.append(indexList)
         unlabel_dict = np.sort(unlabel_dict)  # dict序列排序
-        dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
+        if 'SL' not in opt.method:
+            dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
         train_dataset.append(dataset)
         count += len(indexList)
 
