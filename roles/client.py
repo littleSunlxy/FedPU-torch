@@ -20,7 +20,6 @@ class Client:
     def __init__(self, client_id, model_pu, trainloader=None, testloader=None, priorlist=None, indexlist=None):
         self.client_id = client_id
         self.current_round = 0
-        self.batches = opt.pu_batchsize
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
         if not opt.usePU:
