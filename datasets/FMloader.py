@@ -15,14 +15,10 @@ class DataLoader:
         Created by:
             Wonyong Jeong (wyjeong@kaist.ac.kr)
         """
-        args.dataset_path = '/home/hadoop-automl/cephfs/data/linxinyang/dataset/cifar10/'   # for datasets
-        args.dataset_id_to_name = {0: 'cifar_10'}
-        args.dataset_id = 0
-
         self.args = args
         self.shape = (32,32,3)
         self.rand_augment = RandAugment()
-        self.base_dir = os.path.join(self.args.dataset_path, self.args.task) 
+        self.base_dir = os.path.join(self.args.data_root, self.args.task) 
         self.stats = [{
                 'mean': [x/255 for x in [125.3,123.0,113.9]],
                 'std': [x/255 for x in [63.0,62.1,66.7]]

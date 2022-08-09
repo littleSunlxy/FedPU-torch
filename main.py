@@ -1,13 +1,14 @@
 from options import opt
+from config import set_config
 from modules.model import CNNMnist, ResNet9
 from roles.FmpuTrainer import FmpuTrainer
 
-
-# os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+import os
 
 
 
 def main():
+    set_config(opt)
     print("Acc from:", opt, "\n")
     if opt.dataset == 'MNIST':
         trainer = FmpuTrainer(CNNMnist().cuda())

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 
 from datasets.dataSpilt import CustomImageDataset
-from datasets.loader import DataLoader
+from datasets.FMloader import DataLoader
 from options import opt
 from roles.client import Client
 from roles.aggregator import Cloud
@@ -65,10 +65,10 @@ class FmpuTrainer:
             self.clients_select()
 
             if 'SL' in opt.method:
-                print("##### FedAvg SL is training #####")
+                print("##### Full labeled setting #####")
                 self.clients_train_step_SL()
             else:
-                print("##### FedPU is training #####")
+                print("##### Semi-supervised setting #####")
                 self.clients_train_step_SS()   # memery up
 
             self.cloud.aggregate(self.clientSelect_idxs)
@@ -91,16 +91,19 @@ class FmpuTrainer:
 
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
-                if opt.usePU:
+                if opt.use_PULoss:
                     self.clients[idx].train_fedprox_pu(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
                 else:
                     self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                        globalmodel=self.cloud.aggregated_client_model)
-        elif 'FedPU' in opt.method:
+        elif 'FedAvg' in opt.method:
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
-                self.clients[idx].train_fedpu_pu()
+                if opt.use_PULoss:
+                    self.clients[idx].train_fedavg_pu()
+                else:
+                    self.clients[idx].train_fedavg_p()
         else:
             return
 
@@ -117,9 +120,9 @@ class FmpuTrainer:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
                 self.clients[idx].train_fedprox_p(epochs=heterogenous_epoch_list[idx], mu=mu,
                                                   globalmodel=self.cloud.aggregated_client_model)
-        elif 'FedPU' in opt.method:
+        elif 'FedAvg' in opt.method:
             for idx in self.clientSelect_idxs:
                 self.clients[idx].model.load_state_dict(self.cloud_lastmodel.state_dict())
-                self.clients[idx].train_fedpu_fedavg()
+                self.clients[idx].train_fedavg_p()
         else:
             return

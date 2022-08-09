@@ -6,7 +6,7 @@ from pylab import *
 from options import opt
 from options import FedAVG_aggregated_model_path
 from modules.loss import PLoss, MPULoss_V2
-from datasets.loader import DataLoader
+from datasets.FMloader import DataLoader
 from datasets.dataSpilt import CustomImageDataset, get_default_data_transforms
 
 
@@ -22,7 +22,7 @@ class Client:
         self.current_round = 0
         self.original_model = deepcopy(model_pu).cuda()
         self.model = model_pu
-        if not opt.usePU:
+        if not opt.use_PULoss:
             self.loss = PLoss(opt.num_classes).cuda()
         else:
             # self.loss = MPULoss_INDEX(opt.num_classes, opt.pu_weight).cuda()
@@ -101,7 +101,7 @@ class Client:
         self.x_valid = self.loader.scale(self.x_valid)
 
 
-    def train_fedpu_pu(self):
+    def train_fedavg_pu(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):
@@ -122,6 +122,7 @@ class Client:
 
         self.communicationRound+=1
         self.scheduler.step()
+
 
     def train_fedprox_p(self, epochs=20, mu=0.0, globalmodel=None):
         self.model.train()
@@ -147,7 +148,7 @@ class Client:
                 loss.backward()
                 total_loss.append(loss)
                 self.optimizer_p.step()
-        print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
+        print('mean loss of {} epochs: {:.4f}'.format(epoch, (sum(total_loss)/len(total_loss)).item()))
 
         self.communicationRound += 1
         self.scheduler_p.step()
@@ -185,15 +186,15 @@ class Client:
                 total_loss.append(loss)
                 loss.backward()
                 self.optimizer_pu.step()
-            print("epoch", epoch, "lr:", self.optimizer_pu.state_dict()['param_groups'][0]['lr'])
-        print('mean loss of {} epochs: {:.4f}'.format(epochs, (sum(total_loss)/len(total_loss)).item()))
+            # print("epoch", epoch, "lr:", self.optimizer_pu.state_dict()['param_groups'][0]['lr'])
+        print('mean loss of {} epochs: {:.4f}'.format(epoch, (sum(total_loss)/len(total_loss)).item()))
         self.communicationRound += 1
         self.scheduler.step()
 
 
 
 
-    def train_fedpu_fedavg(self):
+    def train_fedavg_p(self):
         self.model.train()
         total_loss = []
         for epoch in range(opt.local_epochs):
@@ -227,41 +228,3 @@ class Client:
             correct += (pred == labels).sum().item()
         print('Accuracy of the {} on the testing sets: {:.4f} %%'.format(self.client_id, 100 * correct / total))
         return 100 * correct / total
-
-
-
-    def cal_trainAcc(self):
-        self.model.eval()
-        correct = 0
-        total = 0
-        # random choose
-        for i, (inputs, labels) in enumerate(self.train_loader):
-            inputs = inputs.cuda()
-            labels = labels.cuda()
-            outputs = self.model(inputs)
-            orilabels = labels - opt.num_classes
-            pred = outputs.data.max(1, keepdim=True)[1].view(labels.shape[0]).cuda()
-            total += labels.size(0)
-            correct += (pred == labels).sum().item()
-            correct += (pred == orilabels).sum().item()
-            break
-        print('Accuracy of the {} on the training sets: {:.4f} %%'.format(self.client_id, 100 * correct / total))
-        return 100.0 * correct / total
-
-
-
-def cal_train_PositveAcc(model, num_classes, images, labels):
-    correct = 0
-    total = 0
-    with torch.no_grad():  # 训练集中不需要反向传播
-        outputs = model(images)
-        mask = (labels < num_classes).nonzero().view(-1)
-        groundTruth = torch.index_select(labels, 0, mask)
-        predictOnLabeled = torch.index_select(outputs, 0, mask)
-        pred = predictOnLabeled.data.max(1, keepdim=True)[1].view(groundTruth.shape[0]).cuda()
-        total += pred.size(0)
-        correct += (pred == groundTruth).sum().item()
-    print('Accuracy of the network on the training 【Positive】 sets: {:.4f} %%' .format(100 * correct / total))
-    return 100.0 * correct / total
-
-
