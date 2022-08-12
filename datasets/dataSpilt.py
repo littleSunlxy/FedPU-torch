@@ -50,17 +50,17 @@ class CustomImageDataset(Dataset):
 
 
 def get_MNIST():
-    dataset_train = datasets.MNIST(root=opt.label_dir, train=True, download=True,
+    dataset_train = datasets.MNIST(root=opt.data_root, train=True, download=True,
                                        transform = get_default_data_transforms(opt.dataset, verbose=False)[0])
-    dataset_test = datasets.MNIST(root=opt.label_dir, train=False, download=True,
+    dataset_test = datasets.MNIST(root=opt.data_root, train=False, download=True,
                                       transform = get_default_data_transforms(opt.dataset, verbose=False)[1])
     return dataset_train.train_data.numpy(), dataset_train.train_labels.numpy(), dataset_test.test_data.numpy(), dataset_test.test_labels.numpy(), dataset_train
 
 
 def get_CIFAR10():
     '''Return CIFAR10 train/test data and labels as numpy arrays'''
-    data_train = datasets.CIFAR10(root=opt.label_dir, train=True, download=True)
-    data_test = datasets.CIFAR10(root=opt.label_dir, train=False, download=True)
+    data_train = datasets.CIFAR10(root=opt.data_root, train=True, download=True)
+    data_test = datasets.CIFAR10(root=opt.data_root, train=False, download=True)
     #
     # x_train, y_train = data_train.train_data.transpose((0, 3, 1, 2)), np.array(data_train.train_labels)
     # x_test, y_test = data_test.test_data.transpose((0, 3, 1, 2)), np.array(data_test.test_labels)
@@ -229,34 +229,6 @@ def split_image_data(data, labels, n_clients=10, classes_per_client=10, shuffle=
         print_split(clients_split)
     return clients_split
 
-#
-# def iid_partition(dataset, clients):
-#     """
-#     I.I.D paritioning of data over clients
-#     Shuffle the data
-#     Split it between clients
-#
-#     params:
-#       - dataset (torch.utils.Dataset): Dataset containing the MNIST Images
-#       - clients (int): Number of Clients to split the data between
-#
-#     returns:
-#       - Dictionary of image indexes for each client
-#     """
-#
-#     num_items_per_client = int(len(dataset) / clients)
-#     client_dict = {}
-#     image_idxs = [i for i in range(len(dataset))]
-#
-#     for i in range(clients):
-#         client_dict[i] = set(np.random.choice(image_idxs, num_items_per_client, replace=False))
-#         image_idxs = list(set(image_idxs) - client_dict[i])
-#         import pdb; pdb.set_trace()
-#         print("Data split:")
-#         print(" - Client {}: {}".format(i, client_dict[i]))
-#         print()
-#     return client_dict
-
 
 def get_data_loaders(verbose=True):
     x_train, y_train, x_test, y_test = globals()['get_' + opt.dataset]()
@@ -265,10 +237,7 @@ def get_data_loaders(verbose=True):
     transforms_train, transforms_eval = get_default_data_transforms(opt.dataset, verbose=False)
     test_loader = torch.utils.data.DataLoader(CustomImageDataset(x_test, y_test, transforms_eval),
                                               batch_size=opt.pu_batchsize, shuffle=True)
-    # if opt.is_noniid:
-    #     split = iid_partition(dataset_train, opt.num_clients)
-    #     # dict to list
-    # else:
+
     split = split_image_data(x_train, y_train, n_clients=opt.num_clients,
                              classes_per_client=opt.classes_per_client,
                              verbose=verbose)
@@ -290,7 +259,6 @@ def get_data_loaders(verbose=True):
         samplesize = [0 * 1 for i in range(opt.num_classes)]
         for l in dataset.labels:
             samplesize[l] += 1
-        # if opt.dataset == 'MNIST'
         if opt.P_Index_accordance:          # indexlist长度一致
             for j in range(opt.randomIndex_num):
                 k = 0
@@ -318,7 +286,12 @@ def get_data_loaders(verbose=True):
                     k += 1
         label_dict, unlabel_dict, priorList = puSpilt_index(dataset, indexList, samplesize)
         priorlist.append(priorList)
-        indexlist.append(indexList)
+        # convert to onehot for torch
+        li = [0]*opt.num_classes
+        for i in indexList:
+            li[i] = 1
+        indexlist.append(li)
+
         unlabel_dict = np.sort(unlabel_dict)  # dict序列排序
         if 'SL' not in opt.method:
             dataset = relabel_K(dataset, unlabel_dict)  # 将挑出的unlabeled数据标签全部改为classnum-1
@@ -333,7 +306,11 @@ def get_data_loaders(verbose=True):
 
     stats = [x.shape[0] for x, y in split]
 
-    return client_loaders, stats, test_loader, torch.Tensor(indexlist).cuda(), torch.Tensor(priorlist).cuda()
+    indexlist = torch.Tensor(indexlist).cuda()
+    priorlist = torch.Tensor(priorlist).cuda()
+
+    return client_loaders, stats, test_loader, indexlist, priorlist
+    # torch.Tensor(indexlist).cuda(), torch.Tensor(priorlist).cuda()
 
 
 

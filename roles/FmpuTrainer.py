@@ -15,7 +15,6 @@ from modules.fedprox import GenerateLocalEpochs
 class FmpuTrainer:
     def __init__(self, model_pu):
         # load data
-
         if not opt.useFedmatchDataLoader:
             # create Clients and Aggregating Server
             local_dataloaders, local_sample_sizes, test_dataloader , indexlist, priorlist = get_data_loaders()

@@ -16,11 +16,8 @@ parser.add_argument('--num_classes', type=int, default=10)
 # PU param
 parser.add_argument('--pu_weight', type=float, default=1, help='weight of puloss') #1
 parser.add_argument('--local_epochs', type=int, default=20, help='epoches of each client')
-parser.add_argument('--use_PULoss', action='store_true', default=False,
-                    help='use PULoss or only PLoss')
+
 # pu dataloader                  
-parser.add_argument('--is_noniid', action='store_true', default=False,
-                    help='non-iid setting')
 parser.add_argument('--randomIndex_num', type=int, default=2,
 help='rate of positive sample')
 parser.add_argument('--P_Index_accordance', action='store_true', 
@@ -28,7 +25,7 @@ parser.add_argument('--P_Index_accordance', action='store_true',
 parser.add_argument('--positiveRate', type=float, default=0.33,
                     help='rate of positive sample')
 # use Fedmatch dataloader
-parser.add_argument('--task', type=str, default='lc-biid-c10')
+parser.add_argument('--task', type=str, default='FedPU')
 parser.add_argument('--useFedmatchDataLoader', action='store_true', 
                     help='the same positive class index number')
 parser.add_argument('--method', type=str, default='FedAvg')

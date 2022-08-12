@@ -2,7 +2,7 @@ import glob
 from PIL import Image
 from scipy.ndimage.interpolation import shift
 from datasets.randaug import RandAugment
-from utils import *
+from datasets.utils import *
 
 class DataLoader:
 

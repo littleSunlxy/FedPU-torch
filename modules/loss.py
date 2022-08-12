@@ -104,7 +104,6 @@ class PLoss(nn.Module):
     def forward(self, outputs, labels):
         outputs = outputs.cuda().float()
 
-        # 数据划分
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1)
         labelsP = torch.index_select(labels, 0, P_mask).cuda()
         outputsP = torch.index_select(outputs, 0, P_mask).cuda()
@@ -125,22 +124,19 @@ class MPULoss_V2(nn.Module):
     def forward(self, outputs, labels, priorlist, indexlist):
         outputs = outputs.float()
         outputs_Soft = F.softmax(outputs, dim=1)
-        new_P_indexlist =  torch.zeros(self.numClass).cuda()
+        new_P_indexlist = indexlist
+        torch.zeros(self.numClass).cuda()
         eps = 1e-6
 
-        indexlist = indexlist.long()
-        for i in indexlist:
-            new_P_indexlist[i] += 1
-
-        # 数据划分
+        # P U data
         P_mask = (labels <= self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
         labelsP = torch.index_select(labels, 0, P_mask)
         outputsP = torch.index_select(outputs, 0, P_mask)
         outputsP_Soft = torch.index_select(outputs_Soft, 0, P_mask)
 
         U_mask = (labels > self.numClass - 1).nonzero(as_tuple=False).view(-1).cuda()
-        outputsU = torch.index_select(outputs, 0, U_mask)               #  unlabeldata 的 ground truth. setting限制不能使用
-        outputsU_Soft = torch.index_select(outputs_Soft, 0, U_mask)     #  所有在 unlabeldata 上的预测值
+        outputsU = torch.index_select(outputs, 0, U_mask)             
+        outputsU_Soft = torch.index_select(outputs_Soft, 0, U_mask)    
 
         PULoss = torch.zeros(1).cuda()
 
