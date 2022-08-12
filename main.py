@@ -10,7 +10,6 @@ import torch
 def main():
     set_config(opt)
     print("Acc from:", opt, "\n")
-    # torch.distributed.init_process_group(backend="nccl")
 
     if opt.dataset == 'MNIST':
         model = CNNMnist().cuda()

@@ -81,7 +81,7 @@ class FmpuTrainer:
 
     def clients_train_step_SS(self):
         if 'FedProx' in opt.method:
-            percentage = opt.percentage    # 0.5  0.9
+            percentage = opt.percentage
             mu = opt.mu
             print(f"System heterogeneity set to {percentage}% stragglers.\n")
             print(f"Picking {len(self.clientSelect_idxs)} random clients per round.\n")
